@@ -2,6 +2,6 @@
 schema model
 services, indexing
 controller, indexing
-yup validation
 routes indexing
+joi validation
 

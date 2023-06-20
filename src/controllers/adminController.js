@@ -73,7 +73,7 @@ export let createAdminUser = tryCatchWrapper(async (req, res) => {
   </div>
 `;
 
-  await sendMail({
+  await senaddMail({
     from: `"Nitan Thapa" <${fromEmail}>`,
     to: [body.email],
     subject: "Email verification",
