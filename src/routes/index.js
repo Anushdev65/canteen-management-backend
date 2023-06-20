@@ -1,17 +1,22 @@
 import { Router } from "express";
 import adminRegisterRouter from "./adminRegisterRouter.js";
 import fileUploadRouter from "./fileUpload.js";
+import roleRouter from "./roleRouter.js";
 
 const apiRouter = Router();
 
 const ourRoutes = [
   {
-    path: `/admin`,
+    path: `/admins`,
     router: adminRegisterRouter,
   },
   {
-    path: `/file`,
+    path: `/files`,
     router: fileUploadRouter,
+  },
+  {
+    path: `/roles`,
+    router: roleRouter,
   },
 ];
 
