@@ -12,7 +12,7 @@ export const tokenSchema = Schema({
     enum: [
       tokenTypes.ACCESS,
       tokenTypes.RESET_PASSWORD,
-      tokenTypes.VERIFY_PASSWORD,
+      tokenTypes.VERIFY_EMAIL,
     ],
     default: tokenTypes.ACCESS,
     required: true,

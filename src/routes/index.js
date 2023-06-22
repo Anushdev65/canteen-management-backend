@@ -7,7 +7,7 @@ const apiRouter = Router();
 
 const ourRoutes = [
   {
-    path: `/admins`,
+    path: `/auths`,
     router: adminRegisterRouter,
   },
   {
