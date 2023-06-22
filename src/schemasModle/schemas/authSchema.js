@@ -1,36 +1,27 @@
 import { Schema } from "mongoose";
 import { genderEnum, roleEnum } from "../../constant/constant.js";
 
-let adminRegisterSchema = Schema(
+let authSchema = Schema(
   {
     firstName: {
       type: String,
-      required: [true, "Please enter your firstName"],
       trim: true,
     },
     middleName: {
       type: String,
-      required: false,
       trim: true,
     },
     lastName: {
       type: String,
-      required: [true, "Please enter your last"],
       trim: true,
     },
     password: {
       type: String,
-      required: [true, "Please enter your last"],
       trim: true,
     },
-    dob: {
-      type: Date,
-      required: false,
-      trim: true,
-    },
+
     gender: {
       type: String,
-      required: false,
       trim: true,
       enum: {
         values: genderEnum,
@@ -39,9 +30,9 @@ let adminRegisterSchema = Schema(
         },
       },
     },
+
     phoneNumber: {
       type: Number,
-      required: false,
       trim: true,
     },
     email: {
@@ -49,7 +40,6 @@ let adminRegisterSchema = Schema(
       lowercase: true,
       trim: true,
       unique: true,
-      required: [true, "Please enter your email"],
     },
     role: {
       type: String,
@@ -62,16 +52,17 @@ let adminRegisterSchema = Schema(
         },
       },
     },
-    isMarried: {
-      type: Boolean,
-      required: false,
-    },
     isVerified: {
       type: Boolean,
       default: false,
+    },
+
+    profile: {
+      type: String,
+      trim: true,
     },
   },
   { timestamps: true }
 );
 
-export default adminRegisterSchema;
+export default authSchema;

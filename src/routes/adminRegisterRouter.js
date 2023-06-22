@@ -1,64 +1,60 @@
 import { Router } from "express";
-import { adminController } from "../controllers/index.js";
 import { isAuthorized } from "../middleware/isAuthorized.js";
 import { isValidToken } from "../middleware/isValidToken.js";
 import { sortFilterPagination } from "../middleware/sortSelectPage.js";
-import validation from "../middleware/validation.js";
-import adminSchema from "../validation/adminValidation.js";
+// import validation from "../middleware/validation.js";
+// import authSchema from "../schemasModle/schemas/authSchema.js";
+import { authController } from "../controllers/index.js";
 
-export const adminRegisterRouter = Router();
+export const authRouter = Router();
 
-adminRegisterRouter
+authRouter
   .route("/register")
-  .post(validation(adminSchema), adminController.createAdminUser)
-  .post(adminController.createAdminUser)
+  // .post(validation(authSchema),authController.createAuthUser)
+  .post(authController.createAuthUser)
+  .post(authController.createAuthUser)
   .get()
   .delete();
-adminRegisterRouter
-  .route("/login")
-  .post(adminController.loginAdminUser)
-  .get()
-  .delete();
-adminRegisterRouter
+authRouter.route("/login").post(authController.loginAuthUser).get().delete();
+authRouter
+  .route("/verify-email")
+  .patch(isValidToken, authController.verifyEmail);
+authRouter
   .route("/logout")
-  .post(isValidToken, adminController.logoutAdminUser)
+  .post(isValidToken, authController.logoutAuthUser)
   .get()
   .delete();
-adminRegisterRouter
+authRouter
   .route("/update-profile")
-  .patch(isValidToken, adminController.updateAdminUser("myProfile"))
+  .patch(isValidToken, authController.updateAuthUser("myProfile"))
   .get()
   .delete();
-adminRegisterRouter
+authRouter
   .route("/update-password")
-  .patch(isValidToken, adminController.updateAdminPassword)
+  .patch(isValidToken, authController.updateAuthPassword)
   .get()
   .delete();
-adminRegisterRouter
-  .route("/my-profile")
-  .get(isValidToken, adminController.adminMyProfile);
-adminRegisterRouter
+authRouter.route("/my-profile").get(isValidToken, authController.authMyProfile);
+authRouter
   .route("/")
-  .get(isValidToken, adminController.readAllAdminUser, sortFilterPagination);
-adminRegisterRouter
+  .get(isValidToken, authController.readAllAuthUser, sortFilterPagination);
+authRouter
   .route("/:id")
-  .get(isValidToken, adminController.readSpecificAdminUser)
+  .get(isValidToken, authController.readSpecificAuthUser)
   .delete(
     isValidToken,
-    isAuthorized(["superAdmin"]),
-    adminController.deleteSpecificAdminUser
+    isAuthorized(["superAuth"]),
+    authController.deleteSpecificAuthUser
   )
 
-  .patch(isValidToken, adminController.updateAdminUser());
+  .patch(isValidToken, authController.updateAuthUser());
 
-adminRegisterRouter
-  .route("/forgot-password")
-  .post(adminController.forgotAdminPassword);
+authRouter.route("/forgot-password").post(authController.forgotAuthPassword);
 
-adminRegisterRouter
+authRouter
   .route("/reset-password")
-  .post(isValidToken, adminController.resetAdminPassword);
+  .post(isValidToken, authController.resetAuthPassword);
 
-// adminRegisterRouter.route("/:id").patch().delete();
+// authRouter.route("/:id").patch().delete();
 
-export default adminRegisterRouter;
+export default authRouter;

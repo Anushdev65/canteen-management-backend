@@ -18,5 +18,7 @@ export const reset_expiry_in = process.env.RESET_EXPIRE_IN;
 export const tokenTypes = {
   ACCESS: "access",
   RESET_PASSWORD: "resetPassword",
-  VERIFY_PASSWORD: "verifyPassword",
+  VERIFY_EMAIL: "verifyEmail",
 };
+
+export const emailName = process.env.EMAIL_NAME;
