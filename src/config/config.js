@@ -1,7 +1,6 @@
 import { config } from "dotenv";
 config();
-export const dbUrl =
-  process.env.DB_URL || "mongodb://localhost:27017/project-dw-1";
+export const dbUrl = process.env.DB_URL || "mongodb://0.0.0.0:27017/DB_URL";
 export const port = process.env.PORT;
 
 export const staticFolder = "./public";

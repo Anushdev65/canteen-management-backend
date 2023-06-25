@@ -1,4 +1,5 @@
 import { secretKey } from "../config/config.js";
+import { HttpStatus } from "../constant/constant.js";
 import { TokenData } from "../schemasModle/model.js";
 import { verifyToken } from "../utils/token.js";
 import tryCatchWrapper from "./tryCatchWrapper.js";
@@ -19,7 +20,7 @@ export let isValidToken = tryCatchWrapper(async (req, res, next) => {
     // check if the given token is in our database
     if (tok === null) {
       let error = new Error("Please enter valid token");
-      error.statusCode = "401";
+      error.statusCode = HttpStatus.UNAUTHORIZED;
       throw error;
     } else {
       req.token = {
@@ -37,5 +38,5 @@ export let isValidToken = tryCatchWrapper(async (req, res, next) => {
 });
 
 // it check weather the token is valid or not if valid it gives req.info and req.token
-// req.info = { userId: "...", role: "..." };
+// req.info = { userId: "...", roles: "..." };
 // req.token = { token: "...", tokenId: "..." };

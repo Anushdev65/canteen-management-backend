@@ -7,6 +7,11 @@ export const tokenSchema = Schema({
     required: [true, "Please enter your token"],
     trim: true,
   },
+  userId: {
+    type: String,
+    required: [true, "Please enter userId"],
+    trim: true,
+  },
   type: {
     type: String,
     enum: [

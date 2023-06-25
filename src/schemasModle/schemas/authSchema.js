@@ -41,17 +41,20 @@ let authSchema = Schema(
       trim: true,
       unique: true,
     },
-    role: {
-      type: String,
-      required: [true, "Please enter your role"],
-      trim: true,
-      enum: {
-        values: roleEnum,
-        message: (enumValue) => {
-          return `${enumValue.value} is not valid enum`;
+    roles: [
+      {
+        type: String,
+        required: [true, "Please enter your role"],
+        trim: true,
+        enum: {
+          values: Object.values(roleEnum),
+          message: (enumValue) => {
+            return `${enumValue.value} is not valid enum`;
+          },
         },
       },
-    },
+    ],
+
     isVerified: {
       type: Boolean,
       default: false,

@@ -1,5 +1,9 @@
 export const genderEnum = ["male", "female", "other"];
-export const roleEnum = ["superAdmin", "admin", "customer"];
+export const roleEnum = {
+  ADMIN: "admin",
+  CANTEEN: "canteen",
+  STAFF: "staff",
+};
 export const HttpStatus = {
   CONTINUE: 100,
   SWITCHING_PROTOCOLS: 101,
