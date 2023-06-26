@@ -11,43 +11,43 @@ export const authRouter = Router();
 authRouter
   .route("/register")
   // .post(validation(authSchema),authController.createAuthUser)
-  .post(authController.createAuthUser)
-  .post(authController.createAuthUser)
-  .get()
-  .delete();
-authRouter.route("/login").post(authController.loginAuthUser).get().delete();
+  .post(authController.createAuthUser);
+authRouter.route("/login").post(authController.loginAuthUser)
 authRouter
   .route("/verify-email")
   .patch(isValidToken, authController.verifyEmail);
-authRouter
-  .route("/logout")
-  .post(isValidToken, authController.logoutAuthUser)
-  .get()
-  .delete();
+
+authRouter.route("/my-profile").get(isValidToken, authController.authMyProfile);
+
+authRouter.route("/logout").patch(isValidToken, authController.logoutAuthUser);
 authRouter
   .route("/update-profile")
-  .patch(isValidToken, authController.updateAuthUser("myProfile"))
-  .get()
-  .delete();
+  .patch(isValidToken, authController.updateAuthUser("myProfile"));
 authRouter
   .route("/update-password")
   .patch(isValidToken, authController.updateAuthPassword)
   .get()
   .delete();
-authRouter.route("/my-profile").get(isValidToken, authController.authMyProfile);
 authRouter
   .route("/")
   .get(isValidToken, authController.readAllAuthUser, sortFilterPagination);
 authRouter
   .route("/:id")
-  .get(isValidToken, authController.readSpecificAuthUser)
+  .get(
+    isValidToken,
+    isAuthorized(["admin"]),
+    authController.readSpecificAuthUser
+  )
   .delete(
     isValidToken,
-    isAuthorized(["superAuth"]),
+    isAuthorized(["admin"]),
     authController.deleteSpecificAuthUser
   )
-
-  .patch(isValidToken, authController.updateAuthUser());
+  .patch(
+    isValidToken,
+    isAuthorized(["admin"]),
+    authController.updateAuthUser()
+  );
 
 authRouter.route("/forgot-password").post(authController.forgotAuthPassword);
 

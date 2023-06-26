@@ -1,8 +1,5 @@
 import {
-  baseUrl,
-  emailName,
   expiryIn,
-  fromEmail,
   reset_expiry_in,
   secretKey,
   tokenTypes,
@@ -10,13 +7,16 @@ import {
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
+import {
+  sendEmailToForgotPassword,
+  sendEmailToVerify,
+} from "../services/emailServices.js";
 
 import { authService, tokenService } from "../services/index.js";
 import getTokenExpiryTime from "../utils/getTokenExpiryTime.js";
 import { comparePassword, hashPassword } from "../utils/hashFunction.js";
-import { sendMail } from "../utils/sendMail.js";
 import { throwError } from "../utils/throwError.js";
-import { generateToken } from "../utils/token.js";
+import { generateToken, verifyToken } from "../utils/token.js";
 
 // register
 //login
@@ -36,57 +36,36 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
   let user = await authService.readSpecificAuthUserByAny({ email });
 
   if (user) {
-    let error = new Error("Duplicate email.");
-    error.statusCode = 409;
-    throw error;
+    throwError({
+      message: "Duplicate email.",
+      statusCode: HttpStatus.UNAUTHORIZED,
+    });
   } else {
-    let passHashedPassword = await hashPassword(body.password);
-    body.password = passHashedPassword;
     let data = await authService.createAuthUserService({ body });
     delete data._doc.password;
-    let infoObj = { userId: data._id, role: data.role };
+    let infoObj = { userId: data._id, roles: data.roles };
 
     let token = await generateToken(infoObj, secretKey, expiryIn);
+    console.log(token);
 
     let tokenData = {
       token: token,
+      userId: data._id,
       type: tokenTypes.VERIFY_EMAIL,
       expiration: getTokenExpiryTime(token).toLocaleString(),
     };
 
-    // console.log("***************", tokenData);
-
     await tokenService.createTokenService({ data: tokenData });
-
-    let verificationEmailUrl = `${baseUrl}/confirm-email?token=${token}`;
-    const html = `
-    <div style="background: lightgray; padding: 20px; margin: 30px;">
-      <div style="background: #fff; padding: 20px">
-        <br><br> 
-        Dear ${body.firstName} ${body.lastName}, <br>
-        To verify your email, please click on below button: <br>
-        <div style="text-align:center; margin-top: 15px;">
-          <a style="background-color: #FFC43E; padding: 10px; border-radius: 10px; color: black; font-weight: bold; text-decoration: none;" href=${verificationEmailUrl}>Verify Email</a>
-        </div>
-        <br> <br>
-        if above button does not works, click on below link: <br> ${verificationEmailUrl}
-        <br> <br> If you did not request any email verification, then please ignore this email.
-        <br>
-      </div>
-  
-    </div>
-  `;
-
-    await sendMail({
-      from: `"${emailName}" <${fromEmail}>`,
-      to: [body.email],
-      subject: "Email verification",
-      html: html,
+    await sendEmailToVerify({
+      email,
+      token,
+      firstName: body.firstName,
+      lastName: body.lastName,
     });
 
     successResponseData({
       res,
-      message: "Auth Created Successfully.",
+      message: "User Created Successfully.",
       statusCode: HttpStatus.CREATED,
       data,
     });
@@ -94,21 +73,22 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
 });
 
 //localhost:8000/user/email-verify?id=1234234
-export let verifyEmail = expressAsyncHandler(async (req, res, next) => {
-  let id = req.info.id;
+export let verifyEmail = tryCatchWrapper(async (req, res, next) => {
+  let id = req.info.userId;
   let tokenId = req.token.tokenId;
+
+  let passHashedPassword = await hashPassword(req.body.password);
 
   let data = await authService.updateSpecificAuthUserService({
     id,
     body: {
       isVerified: true,
-      password: req.body.password,
+      password: passHashedPassword,
     },
   });
-  delete result._doc.password;
-
+  console.log(data);
+  delete data._doc.password;
   await tokenService.deleteSpecificTokenService({ id: tokenId });
-
   successResponseData({
     res,
     message: "Email verified successfully.",
@@ -120,11 +100,6 @@ export let verifyEmail = expressAsyncHandler(async (req, res, next) => {
 export let loginAuthUser = tryCatchWrapper(async (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
-
-  // let data = await loginAuthUserService(req.body.email, req.body.password);
-  //if email exist
-  //if password match
-  //token send
   let user = await authService.readSpecificAuthUserByAny({ email });
   if (user === null) {
     throwError({
@@ -134,19 +109,19 @@ export let loginAuthUser = tryCatchWrapper(async (req, res) => {
   } else {
     let isValidPassword = await comparePassword(password, user.password);
     if (isValidPassword) {
-      let infoObj = { userId: user._id, role: user.role };
+      let infoObj = { userId: user._id, roles: user.roles };
       let token = await generateToken(infoObj, secretKey, expiryIn);
 
-      console.log("check", getTokenExpiryTime(token).toLocaleString());
+      console.log(token);
+
       let data = {
         token: token,
+        userId: user._id,
         type: tokenTypes.ACCESS,
         expiration: getTokenExpiryTime(token).toLocaleString(),
       };
 
-      let t = await tokenService.createTokenService({ data });
-      // delete user?._doc?.password;
-      // console.log(t.expiration.toLocaleString());
+      await tokenService.createTokenService({ data });
 
       successResponseData({
         res,
@@ -166,49 +141,8 @@ export let loginAuthUser = tryCatchWrapper(async (req, res) => {
   }
 });
 
-// export let loginAuthUser = tryCatchWrapper(async (req, res) => {
-//   let email = req.body.email;
-//   let password = req.body.password;
-
-//   // let data = await loginAuthUserService(req.body.email, req.body.password);
-//   //if email exist
-//   //if password match
-//   //token send
-//   let user = await authService.readSpecificAuthUserByAny({ email });
-//   if (user === null) {
-//     let error = new Error("Please enter valid email or password.");
-//     error.statusCode = HttpStatus.UNAUTHORIZED;
-//     throw error;
-//   } else {
-//     let isValidPassword = await comparePassword(password, user.password);
-//     if (isValidPassword) {
-//       let infoObj = { userId: user._id, role: user.role };
-
-//       let token = await generateToken(infoObj, secretKey, expiryIn);
-
-//       let data = {
-//         token: token,
-//       };
-//       // await TokenData.create(data);
-//       await authService.createTokenService({ data });
-
-//       successResponseData({
-//         res,
-//         message: "Login Successfully.",
-//         statusCode: HttpStatus.OK,
-//         data: token,
-//       });
-//     } else {
-//       let error = new Error("Please enter valid email or password.");
-//       error.statusCode = HttpStatus.UNAUTHORIZED;
-//       throw error;
-//     }
-//   }
-// });
-
 export let logoutAuthUser = tryCatchWrapper(async (req, res) => {
-  let id = req.token.tokenId;
-  await tokenService.deleteSpecificTokenService({ id });
+  await tokenService.deleteSpecificTokenService({ id: req.token.tokenId });
 
   successResponseData({
     res,
@@ -225,22 +159,28 @@ export let updateAuthUser = (profile) =>
     delete body.password;
     delete body.email;
 
-    if (req.info.role === "auth" && body.role === "superAuth") {
-      throwError({
-        message: "Auth is not authorized to change role to super auth",
-        statusCode: 401,
-      });
+    //if user is other than admin lets not allow him to change the role
+    if (!req.info.roles.includes("admin")) {
+      delete body.roles;
     }
 
     let id = profile === "myProfile" ? req.info.userId : req.params.id;
-    let data = await authService.updateSpecificAuthUserService({ id, body });
+    let user = await authService.readSpecificAuthUserService({ id });
+    if (user) {
+      let data = await authService.updateSpecificAuthUserService({ id, body });
 
-    successResponseData({
-      res,
-      message: "User updated successfully.",
-      statusCode: HttpStatus.CREATED,
-      data,
-    });
+      successResponseData({
+        res,
+        message: "User updated successfully.",
+        statusCode: HttpStatus.CREATED,
+        data,
+      });
+    } else {
+      throwError({
+        message: "Could not found user.",
+        statusCode: HttpStatus.NOT_FOUND,
+      });
+    }
   });
 
 export let updateAuthPassword = tryCatchWrapper(async (req, res) => {
@@ -276,8 +216,8 @@ export let updateAuthPassword = tryCatchWrapper(async (req, res) => {
   let data = await authService.updateSpecificAuthUserService({ id, body });
   delete data._doc.password;
   //removing token after update
-  await authService.deleteSpecificTokenService({ id: req.token.tokenId });
-  // return result;
+  // await tokenService.deleteSpecificTokenService({ id: req.token.tokenId });
+  await tokenService.deleteAllTokenOfAUser({ userId: id });
 
   successResponseData({
     res,
@@ -316,35 +256,38 @@ export let forgotAuthPassword = tryCatchWrapper(async (req, res) => {
 
   if (!user) {
     throwError({
-      message: "User does'not exist.",
+      message: "Could'nt found user.",
       statusCode: HttpStatus.UNAUTHORIZED,
     });
   }
-  let infoObj = { userId: user._id, role: user.role };
+  let infoObj = {
+    userId: user._id,
+    roles: user.roles,
+  };
 
   let token = await generateToken(infoObj, secretKey, reset_expiry_in);
-  let data = {
-    token: token,
-    type: tokenTypes.RESET_PASSWORD,
-  };
-  await authService.createTokenService({ data });
+  console.log(token);
 
-  let href = `${baseUrl}/auth/reset-password?token=${token}`;
-  await sendMail({
-    from: '"Nitan Thapa" <nitanthapa425@gmail.com>',
-    to: [email],
-    subject: "Reset Password",
-    html: `<div>
-      <h1>To reset password click on the given link  <h1>
-      <a href="${href}">Click To Reset</a>
-      </div>`,
+  let tokenData = {
+    token: token,
+    userId: user._id,
+    type: tokenTypes.RESET_PASSWORD,
+    expiration: getTokenExpiryTime(token).toLocaleString(),
+  };
+
+  await tokenService.createTokenService({ data: tokenData });
+
+  await sendEmailToForgotPassword({
+    email,
+    token,
+    firstName: user.firstName,
+    lastName: user.lastName,
   });
 
   successResponseData({
     res,
     message: "Email sent successfully.",
     statusCode: HttpStatus.OK,
-    data: href,
   });
 });
 
@@ -375,7 +318,7 @@ export let resetAuthPassword = tryCatchWrapper(async (req, res) => {
     password: await hashPassword(password),
   };
   await authService.updateSpecificAuthUserService({ id, body });
-  await authService.deleteSpecificTokenService({ id: req.token.tokenId });
+  await tokenService.deleteAllTokenOfAUser({ userId: id });
 
   successResponseData({
     res,
@@ -383,19 +326,6 @@ export let resetAuthPassword = tryCatchWrapper(async (req, res) => {
     statusCode: HttpStatus.OK,
   });
 });
-
-// export let deleteAuthUser = tryCatchWrapper(async (req, res) => {
-//   let id = req.params.id;
-//   // let userId = req.info.userId;
-//   let data = await authService.deleteSpecificAuthUserService({ id });
-//   delete data?._doc?.password;
-//   successResponseData({
-//     res,
-//     message: "Delete profile successfully.",
-//     statusCode: HttpStatus.OK,
-//     data,
-//   });
-// });
 
 export let readAllAuthUser = tryCatchWrapper(async (req, res, next) => {
   let find = {};
@@ -417,32 +347,44 @@ export let readAllAuthUser = tryCatchWrapper(async (req, res, next) => {
 export let readSpecificAuthUser = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
   let data = await authService.readSpecificAuthUserService({ id });
-  delete data._doc.password;
-  successResponseData({
-    res,
-    message: "Read user successfully.",
-    statusCode: HttpStatus.OK,
-    data,
-  });
+  if (data) {
+    delete data._doc.password;
+    successResponseData({
+      res,
+      message: "Read user successfully.",
+      statusCode: HttpStatus.OK,
+      data,
+    });
+  } else {
+    throwError({
+      message: "Could'nt found user.",
+      statusCode: HttpStatus.NOT_FOUND,
+    });
+  }
 });
 
-// only superAuth can delete other auth and superAuth
 export let deleteSpecificAuthUser = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
-
   if (id === req.info.userId) {
     throwError({
-      message: "Previous and Current password are same.",
+      message: "User can not delete himself/herself.",
       statusCode: HttpStatus.UNAUTHORIZED,
     });
   }
-
-  let data = await authService.deleteSpecificAuthUserService({ id });
-  delete data?._doc?.password;
-  successResponseData({
-    res,
-    message: "Auth deleted successfully.",
-    statusCode: HttpStatus.OK,
-    data,
-  });
+  let user = await authService.readSpecificAuthUserService({ id });
+  if (user) {
+    let data = await authService.deleteSpecificAuthUserService({ id });
+    delete data?._doc?.password;
+    successResponseData({
+      res,
+      message: "User deleted successfully.",
+      statusCode: HttpStatus.OK,
+      data,
+    });
+  } else {
+    throwError({
+      message: "Couldn't found user.",
+      statusCode: HttpStatus.NOT_FOUND,
+    });
+  }
 });

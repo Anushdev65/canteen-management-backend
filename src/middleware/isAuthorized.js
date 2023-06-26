@@ -2,9 +2,12 @@ import tryCatchWrapper from "./tryCatchWrapper.js";
 // don't add roleArray to roleArray
 export let isAuthorized = (roleArray) =>
   tryCatchWrapper(async (req, res, next) => {
-    let { role } = req.info;
+    let { roles } = req.info;
 
-    let isAuthorizedUser = roleArray.includes(role);
+    let isAuthorizedUser = roles.some((role, i) => {
+      if (roleArray.includes(role)) return true;
+      else return false;
+    });
 
     if (isAuthorizedUser) next();
     else {

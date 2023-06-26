@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { HttpStatus } from "../constant/constant.js";
 export let generateToken = async (
   infoObj = {},
   secretKey = "",
@@ -28,7 +29,7 @@ export let verifyToken = async (token = "", secretKey = "") => {
     return infoObj;
   } catch (error) {
     let er = new Error(error.message);
-    error.statusCode = "401";
+    error.statusCode = HttpStatus.UNAUTHORIZED;
     throw er;
   }
 
