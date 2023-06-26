@@ -76,7 +76,7 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
 export let verifyEmail = tryCatchWrapper(async (req, res, next) => {
   let id = req.info.userId;
   let tokenId = req.token.tokenId;
-  console.log(req.info);
+
   let passHashedPassword = await hashPassword(req.body.password);
 
   let data = await authService.updateSpecificAuthUserService({
@@ -88,9 +88,7 @@ export let verifyEmail = tryCatchWrapper(async (req, res, next) => {
   });
   console.log(data);
   delete data._doc.password;
-
   await tokenService.deleteSpecificTokenService({ id: tokenId });
-
   successResponseData({
     res,
     message: "Email verified successfully.",

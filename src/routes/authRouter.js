@@ -12,7 +12,7 @@ authRouter
   .route("/register")
   // .post(validation(authSchema),authController.createAuthUser)
   .post(authController.createAuthUser);
-authRouter.route("/login").post(authController.loginAuthUser).get().delete();
+authRouter.route("/login").post(authController.loginAuthUser)
 authRouter
   .route("/verify-email")
   .patch(isValidToken, authController.verifyEmail);
