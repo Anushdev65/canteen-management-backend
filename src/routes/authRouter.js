@@ -2,30 +2,43 @@ import { Router } from "express";
 import { isAuthorized } from "../middleware/isAuthorized.js";
 import { isValidToken } from "../middleware/isValidToken.js";
 import { sortFilterPagination } from "../middleware/sortSelectPage.js";
-// import validation from "../middleware/validation.js";
-// import authSchema from "../schemasModle/schemas/authSchema.js";
+import validation from "../middleware/validation.js";
 import { authController } from "../controllers/index.js";
+import {
+  authSchema,
+  verifySchema,
+  loginSchema,
+  logoutSchema,
+  updateProfileSchema,
+  updateUserByAdminSchema,
+  updatePasswordSchema,
+  forgetPasswordSchema,
+  resetPasswordSchema
+} from "../validation/index.js"
 
 export const authRouter = Router();
 
 authRouter
   .route("/register")
   // .post(validation(authSchema),authController.createAuthUser)
-  .post(authController.createAuthUser);
-authRouter.route("/login").post(authController.loginAuthUser)
+  .post(validation(authSchema), authController.createAuthUser);
+authRouter
+  .route("/login").post(validation(loginSchema), authController.loginAuthUser);
 authRouter
   .route("/verify-email")
-  .patch(isValidToken, authController.verifyEmail);
+  .patch(validation(verifySchema), isValidToken, authController.verifyEmail);
 
 authRouter.route("/my-profile").get(isValidToken, authController.authMyProfile);
 
-authRouter.route("/logout").patch(isValidToken, authController.logoutAuthUser);
+authRouter
+  .route("/logout")
+  .patch(validation(logoutSchema), isValidToken, authController.logoutAuthUser);
 authRouter
   .route("/update-profile")
-  .patch(isValidToken, authController.updateAuthUser("myProfile"));
+  .patch(validation(updateProfileSchema), isValidToken, authController.updateAuthUser("myProfile"));
 authRouter
   .route("/update-password")
-  .patch(isValidToken, authController.updateAuthPassword)
+  .patch(validation(updatePasswordSchema), isValidToken, authController.updateAuthPassword)
   .get()
   .delete();
 authRouter
@@ -44,16 +57,18 @@ authRouter
     authController.deleteSpecificAuthUser
   )
   .patch(
+    validation(updateUserByAdminSchema),
     isValidToken,
     isAuthorized(["admin"]),
     authController.updateAuthUser()
   );
 
-authRouter.route("/forgot-password").post(authController.forgotAuthPassword);
+authRouter.route("/forgot-password")
+  .post(validation(forgetPasswordSchema), authController.forgotAuthPassword);
 
 authRouter
   .route("/reset-password")
-  .post(isValidToken, authController.resetAuthPassword);
+  .post(validation(resetPasswordSchema), isValidToken, authController.resetAuthPassword);
 
 // authRouter.route("/:id").patch().delete();
 

@@ -8,8 +8,9 @@ const authSchema = Joi.object()
     firstName: Joi.string()
       .regex(/^[a-zA-Z]*$/)
       .min(3)
-      .max(30),
-    // .required()
+      .max(30)
+      .required(),
+
     // middleName: Joi.string()
     //   .regex(/^[a-zA-Z]*$/)
     //   .min(3)
@@ -26,25 +27,28 @@ const authSchema = Joi.object()
     lastName: Joi.string()
       .regex(/^[a-zA-Z]*$/)
       .min(3)
-      .max(30),
-
-    password: Joi.string()
-      // .regex(
-      //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$/
-      // )
+      .max(30)
       .required(),
-    gender: Joi.string().valid("male", "female", "other"),
+
+    // password: Joi.string()
+    //   // .regex(
+    //   //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$/
+    //   // )
+    //   .required(),
+    gender: Joi.string().valid("male", "female", "other").required(),
     email: Joi.string()
       .regex(
         /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
       )
       .required(),
-    role: Joi.array()
-      .items(Joi.string().valid(Object.values(roleEnum).toString()))
+    roles: Joi.array()
+      .items(Joi.string().valid(...Object.values(roleEnum)))
+      .min(1)
       .required(),
     phoneNumber: Joi.string().regex(
       /(?:\(?\+977\)?)?[9][6-9]\d{8}|01[-]?[0-9]{7}/
-    ),
+    ).required(),
+    profile: Joi.string().required()
 
     // items: Joi.array().items(Joi.string().optional().allow("")).required(),
     // items: Joi.array().items(Joi.string().optional().allow("")).required(),
