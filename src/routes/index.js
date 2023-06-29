@@ -2,9 +2,13 @@ import { Router } from "express";
 import fileUploadRouter from "./fileUpload.js";
 import roleRouter from "./roleRouter.js";
 import authRouter from "./authRouter.js";
+import generateMenuRouter from "./generateMenuRouter.js";
 import categoryRouter from "./categoryRouter.js";
 import tagsRouter from "./tagsRouter.js";
 import foodRouter from "./foodRouter.js";
+
+
+// hello
 
 const apiRouter = Router();
 
@@ -20,6 +24,11 @@ const ourRoutes = [
   {
     path: `/roles`,
     router: roleRouter,
+  },
+
+  {
+    path: `/generateMenu`,
+    router: generateMenuRouter,
   },
   {
     path: `/category`,

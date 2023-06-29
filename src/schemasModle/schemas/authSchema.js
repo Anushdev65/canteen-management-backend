@@ -44,14 +44,14 @@ let authSchema = Schema(
     roles: [
       {
         type: String,
-        required: [true, "Please enter your role"],
+        // required: [true, "Please enter your role"],
         trim: true,
-        enum: {
-          values: Object.values(roleEnum),
-          message: (enumValue) => {
-            return `${enumValue.value} is not valid enum`;
-          },
-        },
+        // enum: {
+        //   values: Object.values(roleEnum),
+        //   message: (enumValue) => {
+        //     return `${enumValue.value} is not valid enum`;
+        //   },
+        // },
       },
     ],
 

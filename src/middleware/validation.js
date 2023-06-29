@@ -1,6 +1,9 @@
+
+
 const validation = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body);
+    // console.log(req.body)
     // const { error } = schema.validate(req.body, { abortEarly: false }); //give all error simultaneously//but it is not good approach
 
     if (!error) {
@@ -15,4 +18,5 @@ const validation = (schema) => {
     }
   };
 };
+
 export default validation;
