@@ -62,3 +62,8 @@ export const HttpStatus = {
   INSUFFICIENT_STORAGE: 507,
   NETWORK_AUTHENTICATION_REQUIRED: 511,
 };
+
+export const description= {
+  SHORT:150,
+  LONG:500
+}
