@@ -10,6 +10,8 @@ const foodSchema = Joi.object()
       rate:Joi.number()
       .required(),
       discountedRate:Joi.number()
+      .less(Joi.ref('rate'))
+      
       .optional(),
       description:Joi.string()
       .min(3)
