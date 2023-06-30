@@ -21,8 +21,7 @@ const foodSchema = Joi.object()
       categoryId:Joi.string()
       .required(),
 
-
-  })
-  .unknown(false);
+})
+  .unknown(false)
 
 export default foodSchema;

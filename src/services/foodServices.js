@@ -1,7 +1,7 @@
 
 import { Food } from "../schemasModle/model.js";
 
-export const createFoodService = async ({ body }) => Food.create(body).populate("categoryId");
+export const createFoodService = async ({ body }) => Food.create(body);
 
 export const readAllFoodService = async ({
   find = {},
@@ -21,4 +21,4 @@ export const updateSpecificFoodService = async ({ id, body }) =>
   Food.findByIdAndUpdate(id, body, {
     new: true,
     runValidators: true,
-  }).populate("categoryId");
+  });
