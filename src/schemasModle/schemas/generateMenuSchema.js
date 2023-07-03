@@ -3,8 +3,8 @@ import { Schema } from "mongoose";
 let generateMenuSchema = Schema(
     {
         foodItem: {
-            type: String,
-            trim: true,
+            type: Schema.Types.ObjectId,
+            ref: "Food",
             unique: true,
         },
         profile: {
@@ -34,6 +34,15 @@ let generateMenuSchema = Schema(
             trim: true,
         },
 
+        addQuantity: {
+            type: Number,
+            trim: true,
+        },
+
+        subtractQuantity: {
+            type: Number,
+            trim: true,
+        }
 
     },
     { timestamps: true }

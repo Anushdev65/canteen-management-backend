@@ -1,4 +1,5 @@
 import { GenerateMenu } from "../schemasModle/model.js";
+import { Food } from "../schemasModle/model.js";
 
 export const createGenerateMenuService = async ({ body }) => GenerateMenu.create(body);
 
