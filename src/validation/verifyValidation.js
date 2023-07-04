@@ -1,26 +1,15 @@
 import Joi from "joi";
 
-const passwordValidation = Joi.string().custom((value, helpers) => {
-    if (value.length < 8) {
-        return helpers.error("any.invalid");
+const verifySchema = Joi.object({
+    password: Joi.string()
+        .required()
+        .min(8)
+        .max(20)
+        .pattern(new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$"))
+        .messages({
+            "string.pattern.base": "Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character",
 
-    }
-    if (!value.match(/[a-zA-Z]/)) {
-        return helpers.error("any.invalid");
-    }
-    if (!value.match(/[0-9]/)) {
-        return helpers.error("any.invalid")
-    }
-
-    return value;
-}, 'Custom password validation').messages({
-    'any.invalid': 'password must be at least 8 characters long and contain at least one letter and one digit'
+        }),
 })
-
-const verifySchema = Joi.object()
-    .keys({
-        password: passwordValidation.required()
-    })
-    .unknown(false);
 
 export default verifySchema;
