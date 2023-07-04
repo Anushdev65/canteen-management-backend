@@ -23,7 +23,9 @@ let foodSchema = Schema(
     description: {
       type: String,
       trim: true,
-    }
+    },
+
+
   },
   { timestamps: true }
 );
