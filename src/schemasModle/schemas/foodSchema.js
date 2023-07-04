@@ -1,4 +1,5 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { tagsEnum } from "../../constant/constant.js";
 
 let foodSchema = Schema(
   {
@@ -6,6 +7,7 @@ let foodSchema = Schema(
       type: String,
       trim: true,
       unique: true,
+      lowercase: true,
     },
     rate:{
         type: Number,
@@ -24,10 +26,19 @@ description:{
   type: String,
   trim:true, 
 },
-
-
+tags:{
+  type: String,
+  trim: true,
+   enum: {
+    values: tagsEnum,
+    message: (enumValue) => {
+      return `${enumValue.value} is not valid enum`;
+    },
   },
+}},
+
   { timestamps: true }
 );
+
 
 export default foodSchema;

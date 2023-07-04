@@ -4,6 +4,7 @@ export const roleEnum = {
   CANTEEN: "canteen",
   STAFF: "staff",
 };
+export const tagsEnum = ["breakfast", "lunch", "dinner","snacks","all time"]
 export const HttpStatus = {
   CONTINUE: 100,
   SWITCHING_PROTOCOLS: 101,
