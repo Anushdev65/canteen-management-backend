@@ -65,7 +65,7 @@ const generateMenuSchema = Joi.object().keys({
         .max(70),
 
     substractQuantity: Joi.number()
-        .required()
+        .optional()
         .min(0)
 
 });

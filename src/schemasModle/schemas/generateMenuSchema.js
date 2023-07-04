@@ -5,7 +5,7 @@ let generateMenuSchema = Schema(
         foodItem: {
             type: Schema.Types.ObjectId,
             ref: "Food",
-            unique: true,
+
         },
         profile: {
             type: String,
