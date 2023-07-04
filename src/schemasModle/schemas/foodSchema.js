@@ -24,8 +24,10 @@ let foodSchema = Schema(
       type: String,
       trim: true,
     },
-
-
+    foodImage: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );
