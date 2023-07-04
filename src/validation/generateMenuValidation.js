@@ -49,7 +49,7 @@ const generateMenuSchema = Joi.object().keys({
     }),
 
     rate: Joi.number()
-        .required()
+        // .required()
         .max(500),
 
     initialQuantity: Joi.number()
@@ -60,6 +60,13 @@ const generateMenuSchema = Joi.object().keys({
         .required()
         .max(100),
 
+    addQuantity: Joi.number()
+        .required()
+        .max(70),
+
+    substractQuantity: Joi.number()
+        .optional()
+        .min(0)
 
 });
 

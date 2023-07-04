@@ -4,10 +4,12 @@ const categorySchema = Joi.object()
   .keys({
     name: Joi.string()
       .custom((value, msg) => {
-        if (value.match(/^[a-zA-Z]*$/)) {
+        if (value.match(/^[a-z]{3,30}$/)) {
           return true;
         }
-        return msg.message("only alphabet is allowed");
+        return msg.message(
+          "Category name must be in lowercase and at least 3 characters long"
+        );
       })
       .required(),
   })

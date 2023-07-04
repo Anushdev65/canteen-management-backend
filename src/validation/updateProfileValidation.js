@@ -8,7 +8,7 @@ const updateProfileSchema = Joi.object({
 
     gender: Joi.string().valid(...Object.values(genderEnum)),
 
-    phoneNumber: Joi.string().trim().pattern(/^\d+$/),
+    phoneNumber: Joi.number(),
 
     roles: Joi.array().items(Joi.string().valid(...Object.values(roleEnum))),
 

@@ -19,5 +19,8 @@ generateMenuRouter
     .patch(validation(generateMenuSchema), isValidToken, isAuthorized([roleEnum.CANTEEN]), generateMenuController.updateGenerateMenu)
     .get(isValidToken, isAuthorized([roleEnum.CANTEEN]), generateMenuController.readSpecificGenerateMenu)
     .delete(isValidToken, isAuthorized([roleEnum.CANTEEN]), generateMenuController.deleteSpecificGenerateMenu);
+generateMenuRouter
+    .route("/food-items")
+    .get(generateMenuController.fetchFoodItems);
 
 export default generateMenuRouter;
