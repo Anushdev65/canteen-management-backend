@@ -13,7 +13,9 @@ const foodSchema = Joi.object()
 
       return msg.message("Food name must be in lowercase and at least 3 characters long");
     })
-      .required(),
+   .required(),
+   
+
       rate:Joi.number()
       .required(),
       discountedRate:Joi.number()
@@ -25,13 +27,13 @@ const foodSchema = Joi.object()
       .max(description.LONG)
       .optional()
       .allow(""),
-      categoryId:Joi.string()
+      category:Joi.string()
       .required(),
 tags:Joi.string().valid("breakfast", "lunch", "dinner","snacks","all time").required(),
 })
   .unknown(false)
   
-  
-
+ 
+ 
 
 export default foodSchema;

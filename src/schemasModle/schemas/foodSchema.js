@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { tagsEnum } from "../../constant/constant.js";
 
 let foodSchema = Schema(
   {
@@ -17,7 +16,7 @@ let foodSchema = Schema(
       type: Number,
       trim: true,
     },
-    categoryId: {
+    category: {
         type: Schema.ObjectId,
         ref: "Category",
         required: [true, "categoryId is required"],
@@ -29,12 +28,7 @@ description:{
 tags:{
   type: String,
   trim: true,
-   enum: {
-    values: tagsEnum,
-    message: (enumValue) => {
-      return `${enumValue.value} is not valid enum`;
-    },
-  },
+   
 }},
 
   { timestamps: true }
