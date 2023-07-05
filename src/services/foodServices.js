@@ -1,5 +1,5 @@
 
-import { Food } from "../schemasModle/model.js";
+import {   Food } from "../schemasModle/model.js";
 
 export const createFoodService = async ({ body }) => Food.create(body);
 
@@ -15,10 +15,14 @@ populate="",
 export const readSpecificFoodService = async ({ id }) => Food.findById(id).populate("categoryId");
 
 export const deleteSpecificFoodService = async ({ id }) =>
-  Food.findByIdAndDelete(id);
+  Food.findByIdAndDelete(id)
+
+
 
 export const updateSpecificFoodService = async ({ id, body }) =>
   Food.findByIdAndUpdate(id, body, {
     new: true,
     runValidators: true,
   });
+
+

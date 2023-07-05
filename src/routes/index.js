@@ -4,7 +4,7 @@ import roleRouter from "./roleRouter.js";
 import authRouter from "./authRouter.js";
 import generateMenuRouter from "./generateMenuRouter.js";
 import categoryRouter from "./categoryRouter.js";
-import tagsRouter from "./tagsRouter.js";
+// import tagsRouter from "./tagsRouter.js";
 import foodRouter from "./foodRouter.js";
 
 
@@ -34,10 +34,10 @@ const ourRoutes = [
     path: `/category`,
     router: categoryRouter,
   },
-  {
-    path: `/tags`,
-    router: tagsRouter,
-  },
+  // {
+  //   path: `/tags`,
+  //   router: tagsRouter,
+  // },
   {
     path: `/food`,
     router: foodRouter,
