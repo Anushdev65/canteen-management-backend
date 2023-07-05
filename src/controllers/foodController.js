@@ -1,10 +1,8 @@
-
-
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
+import { Food } from "../schemasModle/model.js";
 import { foodServices } from "../services/index.js";
-
 
 export let createFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
@@ -21,7 +19,7 @@ export let createFood = tryCatchWrapper(async (req, res) => {
 export let updateFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
   let id = req.params.id;
-console.log(body)
+  console.log(body);
   let data = await foodServices.updateSpecificFoodService({ id, body });
 
   successResponseData({
@@ -32,6 +30,28 @@ console.log(body)
   });
 });
 
+export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
+  console.log(req.body);
+  let data = req.body.map((value, i) => {
+    let data = Food.findByIdAndUpdate(
+      value.id,
+      {
+        availableTime: req.body.availableTime,
+        initialQuantity: req.body.initialQuantity,
+        availableQuantity: req.body.availableQuantity,
+      },
+      { new: true }
+    );
+    return data;
+  });
+
+  successResponseData({
+    res,
+    message: "Menu updated successfully",
+    statusCode: HttpStatus.OK,
+    data,
+  });
+});
 export let readSpecificFood = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
 
@@ -64,4 +84,3 @@ export let deleteSpecificFood = tryCatchWrapper(async (req, res) => {
     data,
   });
 });
-

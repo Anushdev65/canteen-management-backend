@@ -7,7 +7,7 @@ import { roleEnum } from "../constant/constant.js";
 import categorySchema from "../validation/categoryValidation.js";
 import validation from "../middleware/validation.js";
 
- const categoryRouter = Router();
+const categoryRouter = Router();
 
 categoryRouter
   .route("/")
@@ -16,8 +16,20 @@ categoryRouter
  
 categoryRouter
   .route("/:id")
-  .patch(isValidToken,isAuthorized([roleEnum.CANTEEN]),categoryController.updateCategory)
-  .get(isValidToken,isAuthorized([roleEnum.CANTEEN]),categoryController.readSpecificCategory)
-  .delete(isValidToken,isAuthorized([roleEnum.CANTEEN]),categoryController.deleteSpecificCategory);
+  .patch(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN]),
+    categoryController.updateCategory
+  )
+  .get(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN]),
+    categoryController.readSpecificCategory
+  )
+  .delete(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN]),
+    categoryController.deleteSpecificCategory
+  );
 
 export default categoryRouter;
