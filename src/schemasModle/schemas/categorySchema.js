@@ -6,6 +6,7 @@ let categorySchema = Schema(
       type: String,
       trim: true,
       unique: true,
+      lowercase: true,
     },
   },
   { timestamps: true }

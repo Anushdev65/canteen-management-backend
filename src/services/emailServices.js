@@ -1,4 +1,4 @@
-import { baseUrl, emailName, fromEmail } from "../config/config.js";
+import { clientBaseUrl, emailName, fromEmail } from "../config/config.js";
 import { sendMail } from "../utils/sendMail.js";
 
 export const sendEmailToVerify = async ({
@@ -7,7 +7,8 @@ export const sendEmailToVerify = async ({
   firstName,
   lastName,
 }) => {
-  let link = `${baseUrl}/confirm-email?token=${token}`;
+  let link = `${clientBaseUrl}/confirm-email?token=${token}`;
+
   const html = `
     <div style="background: lightgray; padding: 20px; margin: 30px;">
       <div style="background: #fff; padding: 20px">
@@ -38,7 +39,7 @@ export const sendEmailToForgotPassword = async ({
   firstName,
   lastName,
 }) => {
-  let link = `${baseUrl}/auth/reset-password?token=${token}`;
+  let link = `${clientBaseUrl}/auth/reset-password?token=${token}`;
   const html = `
   <div style="background: lightgray; padding: 20px; margin: 30px;">
     <div style="background: #fff; padding: 20px">
