@@ -1,14 +1,15 @@
 import { Schema } from "mongoose";
 
-let generateMenuSchema = Schema(
+
+const userFoodOrderSchema = Schema(
     {
         foodItem: {
-            type: Schema.Types.ObjectId,
-            ref: "Food",
-            unique: true,
-
+            type: String,
+            ref: "GenerateMenu"
         },
-
+        img: {
+            type: String,
+        },
         availableTime: {
             from: {
                 type: Date,
@@ -16,33 +17,27 @@ let generateMenuSchema = Schema(
             to: {
                 type: Date,
             },
-
         },
-
         rate: {
             type: Number,
-            trim: true,
         },
-
+        subRate: {
+            type: Number,
+        },
         initialQuantity: {
             type: Number,
-            trim: true,
-
         },
-
         availableQuantity: {
             type: Number,
-            trim: true,
         },
-
-        addQuantity: {
+        quantity: {
             type: Number,
-            trim: true,
+        },
+        price: {
+            type: Number,
         },
 
+    }
+)
 
-    },
-    { timestamps: true }
-);
-
-export default generateMenuSchema;
+export default userFoodOrderSchema;

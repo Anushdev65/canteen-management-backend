@@ -18,7 +18,8 @@
     "express-rate-limit": "^6.7.0",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
-    "mongoose": "^6.10.5",
+    "mongoose": "^7.0.0",
+    "mongoose-unique-validator": "^4.0.0",
     "multer": "^1.4.5-lts.1",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.1"

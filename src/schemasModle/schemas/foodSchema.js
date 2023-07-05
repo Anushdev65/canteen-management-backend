@@ -1,4 +1,6 @@
 import { Schema } from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
+
 
 let foodSchema = Schema(
   {
@@ -29,5 +31,7 @@ let foodSchema = Schema(
   },
   { timestamps: true }
 );
+
+foodSchema.plugin(uniqueValidator, { message: 'This food already exists' })
 
 export default foodSchema;
