@@ -65,6 +65,13 @@ let foodSchema = Schema(
   { timestamps: true }
 );
 
-foodSchema.plugin(uniqueValidator, { message: 'This food already exists' })
+foodSchema.plugin(uniqueValidator, {
+  message: function (props) {
+    return `This category '${props.value}' already exists`;
+  }
+})
+
+
+
 
 export default foodSchema;
