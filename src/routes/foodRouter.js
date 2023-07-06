@@ -33,6 +33,7 @@ foodRouter
   .patch(
     isValidToken,
     isAuthorized([roleEnum.CANTEEN]),
+    // validation(foodSchema),
     foodController.updateFood
   )
   .get(

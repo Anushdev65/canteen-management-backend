@@ -31,17 +31,22 @@ export let updateFood = tryCatchWrapper(async (req, res) => {
 });
 
 export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
-  console.log(req.body);
-  let data = req.body.map((value, i) => {
-    let data = Food.findByIdAndUpdate(
-      value.id,
-      {
-        availableTime: req.body.availableTime,
-        initialQuantity: req.body.initialQuantity,
-        availableQuantity: req.body.availableQuantity,
-      },
-      { new: true }
-    );
+  let ids = req.body.map((value, i) => {
+    return value.id;
+  });
+
+  await Food.updateMany({ _id: { $nin: ids } }, { isInMenu: false });
+
+  let data = req.body.map(async (value, i) => {
+    let id = value.id;
+    let body = {
+      availableTime: value.availableTime,
+      initialQuantity: value.initialQuantity,
+      availableQuantity: value.availableQuantity,
+      isInMenu: true,
+    };
+    await foodServices.updateSpecificFoodService({ id, body });
+
     return data;
   });
 
@@ -52,6 +57,7 @@ export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
     data,
   });
 });
+
 export let readSpecificFood = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
 
