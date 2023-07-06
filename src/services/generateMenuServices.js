@@ -9,9 +9,9 @@ export const readAllGenerateMenuService = async ({
     limit = "",
     skip = "",
     select = "",
-}) => GenerateMenu.find(find).sort(sort).limit(limit).skip(skip).select(select);
+}) => GenerateMenu.find(find).sort(sort).limit(limit).skip(skip).select(select).populate("foodItem", "foodName rate");
 
-export const readSpecificGenerateMenuService = async ({ id }) => GenerateMenu.findById(id);
+export const readSpecificGenerateMenuService = async ({ id }) => GenerateMenu.findById(id).populate("foodItem", "foodName rate ");
 
 export const deleteSpecificGenerateMenuService = async ({ id }) =>
     GenerateMenu.findByIdAndDelete(id);

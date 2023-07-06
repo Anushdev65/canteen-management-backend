@@ -19,10 +19,6 @@ let generateMenuSchema = Schema(
 
         },
 
-        rate: {
-            type: Number,
-            trim: true,
-        },
 
         initialQuantity: {
             type: Number,

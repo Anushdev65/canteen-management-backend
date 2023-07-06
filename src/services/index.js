@@ -5,3 +5,4 @@ export * as generateMenuServices from "./generateMenuServices.js";
 export * as categoryServices from "./categoryServices.js";
 export * as tagsServices from "./tagsServices.js";
 export * as foodServices from "./foodServices.js";
+export * as orderFoodServices from "./orderFoodServices.js";

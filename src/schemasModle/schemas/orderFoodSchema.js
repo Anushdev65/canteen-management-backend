@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 
 
-const userFoodOrderSchema = Schema(
+const orderFoodSchema = Schema(
     {
         foodItem: {
             type: String,
@@ -37,7 +37,8 @@ const userFoodOrderSchema = Schema(
             type: Number,
         },
 
-    }
+    },
+    {timestamps: true}
 )
 
-export default userFoodOrderSchema;
+export default orderFoodSchema;

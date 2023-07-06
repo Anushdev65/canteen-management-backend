@@ -6,6 +6,7 @@ import generateMenuRouter from "./generateMenuRouter.js";
 import categoryRouter from "./categoryRouter.js";
 import tagsRouter from "./tagsRouter.js";
 import foodRouter from "./foodRouter.js";
+import orderFoodRouter from "./orderFoodRouter.js";
 
 
 // hello
@@ -42,6 +43,10 @@ const ourRoutes = [
     path: `/food`,
     router: foodRouter,
   },
+  {
+    path: `/orderFood`,
+    router: orderFoodRouter,
+  }
 ];
 
 ourRoutes.forEach((route) => {

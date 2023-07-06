@@ -4,7 +4,7 @@ import uniqueValidator from "mongoose-unique-validator";
 
 let foodSchema = Schema(
   {
-    name: {
+    foodName: {
       type: String,
       trim: true,
       unique: true,
