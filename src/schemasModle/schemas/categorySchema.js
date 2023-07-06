@@ -7,7 +7,8 @@ let categorySchema = Schema(
       type: String,
       trim: true,
       unique: true,
-      uniqueCaseInsensitive: true
+      uniqueCaseInsensitive: true,
+      lowercase: true,
     },
   },
   { timestamps: true }
