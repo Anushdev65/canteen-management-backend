@@ -16,9 +16,23 @@ const foodSchema = Joi.object()
       })
       .required(),
 
-    rate: Joi.number().required(),
-    foodImage: Joi.string().required(),
-    discountedRate: Joi.number().less(Joi.ref("rate")).optional().allow(""),
+    rate: Joi.number().required().messages({
+      "any.required": "rate is required.",
+      "number.base": "rate must be a number.",
+    }),
+    foodImage: Joi.string().required().messages({
+      "any.required": "foodImage is required.",
+      "string.base": "foodImage must be a string.",
+    }),
+    discountedRate: Joi.number()
+      .less(Joi.ref("rate"))
+      .optional()
+      .allow("")
+      .messages({
+        "number.base": "discountedRate must be a number.",
+        "number.less": "discountedRate must be less than the rate.",
+        "any.required": "discountedRate is required.",
+      }),
     description: Joi.string().min(3).max(description.LONG).optional().allow(""),
     category: Joi.string().required(),
     tags: Joi.string()
