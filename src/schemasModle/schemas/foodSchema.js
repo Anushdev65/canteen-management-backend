@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { tagsEnum } from "../../constant/constant.js";
 
 let foodSchema = Schema(
   {
@@ -26,21 +25,38 @@ let foodSchema = Schema(
       type: String,
       trim: true,
     },
-    tags: {
-      type: String,
-      trim: true,
-    },
+    tags:[
+      {
+        type:String,
+      }
+    ],
     foodImage: {
       type: String,
       trim: true,
     },
-    menu: {
-      type: Schema.ObjectId,
-      ref: "GenerateMenu",
-    },
+    
     isInMenu: {
       type: Boolean,
       default: false,
+    },
+
+    availableTime: {
+      from: {
+        type: String,
+      },
+      to: {
+        type: String,
+      },
+    },
+
+    initialQuantity: {
+      type: Number,
+      trim: true,
+    },
+
+    availableQuantity: {
+      type: Number,
+      trim: true,
     },
   },
 

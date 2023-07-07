@@ -1,7 +1,6 @@
 import Joi from "joi";
 
 
-
 const categorySchema = Joi.object()
 
 
@@ -15,22 +14,13 @@ const categorySchema = Joi.object()
           "Category name must be in lowercase and at least 3 characters long"
         );
       })
-<<<<<<< HEAD
-      .required(),
+      .required() 
+       
   })
 
   .unknown(false);
 
 export default categorySchema;
-=======
-     
-      
-
-      .required()    
-  })
-
-  .unknown(false)
-  export default categorySchema
 
 
 
@@ -38,5 +28,11 @@ export default categorySchema;
 
 
 
+ 
 
->>>>>>> 59725d1ec28ba851574ae3bf39151810df375980
+
+
+
+
+
+

@@ -10,9 +10,9 @@ export const readAllFoodService = async ({
   skip = "",
   select = "",
 populate="",
-}) => Food.find(find).sort(sort).limit(limit).skip(skip).select(select).populate("categoryId");
+}) => Food.find(find).sort(sort).limit(limit).skip(skip).select(select).populate("category");
 
-export const readSpecificFoodService = async ({ id }) => Food.findById(id).populate("categoryId");
+export const readSpecificFoodService = async ({ id }) => Food.findById(id).populate("category");
 
 export const deleteSpecificFoodService = async ({ id }) =>
   Food.findByIdAndDelete(id)

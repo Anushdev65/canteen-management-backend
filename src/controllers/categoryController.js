@@ -1,16 +1,13 @@
-
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
+import { Food } from "../schemasModle/model.js";
 import { categoryServices } from "../services/index.js";
-
 
 export let createCategory = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
 
   let data = await categoryServices.createCategoryService({ body: body });
- 
-
 
   successResponseData({
     res,
@@ -36,7 +33,7 @@ export let updateCategory = tryCatchWrapper(async (req, res) => {
 export let readSpecificCategory = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
 
-  let data = await categoryServices.readSpecificCategoryService({ id });;
+  let data = await categoryServices.readSpecificCategoryService({ id });
 
   successResponseData({
     res,
@@ -49,7 +46,7 @@ export let readSpecificCategory = tryCatchWrapper(async (req, res) => {
 export let readAllCategory = tryCatchWrapper(async (req, res, next) => {
   let find = {};
   req.find = find;
-  req.service = categoryServices.readAllCategoryService;;
+  req.service = categoryServices.readAllCategoryService;
 
   next();
 });
@@ -57,7 +54,7 @@ export let readAllCategory = tryCatchWrapper(async (req, res, next) => {
 export let deleteSpecificCategory = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
   let data = await categoryServices.deleteSpecificCategoryService({ id });
-
+  await Food.deleteMany({ category: id });
   successResponseData({
     res,
     message: "Category delete successfully.",
