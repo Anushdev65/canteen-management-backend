@@ -1,42 +1,32 @@
 import Joi from "joi";
 
-
-
 const orderFoodSchema = Joi.object().keys({
-    foodItem: Joi.string()
-        .required(),
+  foodName: Joi.string()
+    .custom((value, msg) => {
+      if (value.match(/^[a-z]{3,30}$/)) {
+        return true;
+      }
 
-    img: Joi.string()
-        .trim()
-        .uri(),
+      return msg.message(
+        "Food name must be in lowercase and at least 3 characters long"
+      );
+    })
+    .required(),
 
-    availableTime: Joi.object().keys({
-        from: Joi.date().required(),
-        to: Joi.date().required(),
-    }),
+  img: Joi.string().trim().uri(),
 
-    rate: Joi.number()
-        // .required()
-        .max(500),
+  availableTime: Joi.object().keys({
+    from: Joi.date().required(),
+    to: Joi.date().required(),
+  }),
 
-    
+  rate: Joi.number()
+    // .required()
+    .max(500),
 
-    availableQuantity: Joi.number()
-        .required()
-        .max(100),
+  availableQuantity: Joi.number().required().max(100),
 
-    addQuantity: Joi.number()
-        .required()
-        .max(70),
-
-    substractQuantity: Joi.number()
-        .optional()
-        .min(0)
-
+  addQuantity: Joi.number().required().max(70),
 });
-
-
-
-
 
 export default orderFoodSchema;

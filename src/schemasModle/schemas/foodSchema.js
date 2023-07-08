@@ -27,16 +27,16 @@ let foodSchema = Schema(
       type: String,
       trim: true,
     },
-    tags:[
+    tags: [
       {
-        type:String,
-      }
+        type: String,
+      },
     ],
     foodImage: {
       type: String,
       trim: true,
     },
-    
+
     isInMenu: {
       type: Boolean,
       default: false,
@@ -44,10 +44,10 @@ let foodSchema = Schema(
 
     availableTime: {
       from: {
-        type: String,
+        type: Date,
       },
       to: {
-        type: String,
+        type: Date,
       },
     },
 
@@ -68,10 +68,7 @@ let foodSchema = Schema(
 foodSchema.plugin(uniqueValidator, {
   message: function (props) {
     return `This category '${props.value}' already exists`;
-  }
-})
-
-
-
+  },
+});
 
 export default foodSchema;

@@ -28,6 +28,7 @@ foodRouter
     isAuthorized([roleEnum.CANTEEN]),
     foodController.updateFoodMenu
   );
+
 foodRouter
   .route("/:id")
   .patch(
