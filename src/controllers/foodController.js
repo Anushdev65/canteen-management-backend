@@ -37,24 +37,24 @@ export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
 
   await Food.updateMany({ _id: { $nin: ids } }, { isInMenu: false });
 
-  let data = req.body.map(async (value, i) => {
-    let id = value.id;
-    let body = {
-      availableTime: value.availableTime,
-      initialQuantity: value.initialQuantity,
-      availableQuantity: value.availableQuantity,
-      isInMenu: true,
-    };
-    await foodServices.updateSpecificFoodService({ id, body });
-
-    return data;
-  });
+  let _data = await Promise.all(
+    req.body.map(async (value, i) => {
+      let id = value.id;
+      let body = {
+        availableTime: value.availableTime,
+        initialQuantity: value.initialQuantity,
+        availableQuantity: value.availableQuantity,
+        isInMenu: true,
+      };
+      return await foodServices.updateSpecificFoodService({ id, body });
+    })
+  );
 
   successResponseData({
     res,
     message: "Menu updated successfully",
     statusCode: HttpStatus.OK,
-    data,
+    data: _data,
   });
 });
 
