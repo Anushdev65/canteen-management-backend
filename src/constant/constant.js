@@ -3,8 +3,9 @@ export const roleEnum = {
   ADMIN: "admin",
   CANTEEN: "canteen",
   STAFF: "staff",
+  STUDENT: "student",
 };
-export const tagsEnum = ["breakfast", "lunch", "dinner","snacks","all time"]
+export const tagsEnum = ["breakfast", "lunch", "dinner", "snacks", "all time"];
 export const HttpStatus = {
   CONTINUE: 100,
   SWITCHING_PROTOCOLS: 101,
@@ -64,7 +65,7 @@ export const HttpStatus = {
   NETWORK_AUTHENTICATION_REQUIRED: 511,
 };
 
-export const description= {
-  SHORT:150,
-  LONG:500
-}
+export const description = {
+  SHORT: 150,
+  LONG: 500,
+};

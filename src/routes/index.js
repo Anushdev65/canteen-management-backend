@@ -6,7 +6,7 @@ import generateMenuRouter from "./generateMenuRouter.js";
 import categoryRouter from "./categoryRouter.js";
 // import tagsRouter from "./tagsRouter.js";
 import foodRouter from "./foodRouter.js";
-
+import addStudentDepositRouter from "./addStudentDepositRouter.js";
 
 // hello
 
@@ -41,6 +41,10 @@ const ourRoutes = [
   {
     path: `/food`,
     router: foodRouter,
+  },
+  {
+    path: `/addStudentDeposits`,
+    router: addStudentDepositRouter,
   },
 ];
 

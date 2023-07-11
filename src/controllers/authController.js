@@ -168,7 +168,6 @@ export let updateAuthUser = (profile) =>
     let user = await authService.readSpecificAuthUserService({ id });
     if (user) {
       let data = await authService.updateSpecificAuthUserService({ id, body });
-
       successResponseData({
         res,
         message: "User updated successfully.",
