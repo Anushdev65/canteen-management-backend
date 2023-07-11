@@ -32,11 +32,22 @@ const foodSchema = Joi.object()
         "number.less": "discountedRate must be less than the rate.",
         "any.required": "discountedRate is required.",
       }),
-    description: Joi.string().min(3).max(description.LONG).optional().allow(""),
-    category: Joi.string().required(),
+    description: Joi.string()
+      .min(3)
+      .max(description.LONG)
+      .optional()
+      .allow("")
+      .messages({ "string.base": "Description must be in alphabets" }),
+    category: Joi.string().required().messages({
+      "string.base": "Please enter a valid category id",
+    }),
     tags: Joi.string()
       .valid("breakfast", "lunch", "dinner", "snacks", "all time")
-      .required(),
+      .required()
+      .messages({
+        "string.base":
+          "Tags must be breakfast, lunch, dinner snack or all time",
+      }),
     isInMenu: Joi.boolean(),
     availableTime: Joi.object().keys({
       from: Joi.string().optional().allow(""),

@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
+import { Schema } from "mongoose";
 
 let addStudentDepositSchema = Schema(
   {
-    userId: {
+    user: {
       type: Schema.ObjectId,
       ref: "Auth",
     },
