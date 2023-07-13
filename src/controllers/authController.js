@@ -7,6 +7,7 @@ import {
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
+import { Auth } from "../schemasModle/model.js";
 import {
   sendEmailToForgotPassword,
   sendEmailToVerify,
@@ -34,7 +35,8 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
   body.isVerify = false;
   let email = body.email;
   let user = await authService.readSpecificAuthUserByAny({ email });
-
+  let getAllUser = await Auth.find({}).count();
+  body.userId = (getAllUser || 0) + 1;
   if (user) {
     throwError({
       message: "Duplicate email.",

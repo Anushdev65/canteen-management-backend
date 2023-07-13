@@ -54,7 +54,7 @@ const authSchema = Joi.object()
       .regex(/(?:\(?\+977\)?)?[9][6-9]\d{8}|01[-]?[0-9]{7}/)
       .required(),
     profile: Joi.string().required(),
-
+    userId: Joi.number(),
     // items: Joi.array().items(Joi.string().optional().allow("")).required(),
     // items: Joi.array().items(Joi.string().optional().allow("")).required(),
     // items: Joi.array().items(Joi.number()).required(),

@@ -43,7 +43,7 @@ const ourRoutes = [
     router: foodRouter,
   },
   {
-    path: `/addStudentDeposits`,
+    path: `/add-student-deposits`,
     router: addStudentDepositRouter,
   },
 ];
