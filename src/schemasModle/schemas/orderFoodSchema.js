@@ -1,45 +1,25 @@
+import { statusEnum } from "../../constant/constant.js";
 import { Schema } from "mongoose";
 
 const orderFoodSchema = Schema(
   {
-    foodName: {
-      type: Schema.Types.Object,
+    food: {
+      type: Schema.Types.ObjectId,
       ref: "Food",
     },
-    foodImage: {
+
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "Auth",
+    },
+
+    orderStatus: {
       type: String,
-      ref: "Food",
+      trim: true,
+      default: statusEnum.ONPROCESS,
     },
-    availableTime: {
-      from: {
-        type: Date,
-        ref: "Food",
-      },
-      to: {
-        type: Date,
-        ref: "Food",
-      },
-    },
-    rate: {
-      type: Number,
-      ref: "Food",
-    },
-    discountedRate: {
-      type: Number,
-      ref: "Food",
-    },
-    initialQuantity: {
-      type: Number,
-      ref: "Food",
-    },
-    availableQuantity: {
-      type: Number,
-      ref: "Food",
-    },
+
     quantity: {
-      type: Number,
-    },
-    price: {
       type: Number,
     },
   },

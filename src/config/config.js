@@ -9,7 +9,7 @@ export const secretKey = process.env.SECRET_KEY || "project1";
 export const expiryIn = process.env.EXPIRY_IN || "365d";
 export const verifyEmailExpiryIn = process.env.VERIFY_EMAIL_EXPIRY_IN || "1d";
 export const clientBaseUrl =
-  process.env.CLIENT_BASE_URL || "http://localhost:3000";
+  process.env.CLIENT_BASE_URL || "http://localhost:8000";
 
 export const fromEmail = process.env.FROM_EMAIL;
 export const fromPassword = process.env.FROM_PASSWORD;

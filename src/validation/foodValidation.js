@@ -1,7 +1,6 @@
 import Joi from "joi";
 import { description, tagsEnum } from "../constant/constant.js";
 
-
 const foodSchema = Joi.object()
   .keys({
     name: Joi.string()
@@ -40,8 +39,8 @@ const foodSchema = Joi.object()
       .required(),
     isInMenu: Joi.boolean(),
     availableTime: Joi.object().keys({
-      from: Joi.string().optional().allow(""),
-      to: Joi.string().optional().allow(""),
+      from: Joi.date().iso().optional().allow(""),
+      to: Joi.date().iso().optional().allow(""),
     }),
     initialQuantity: Joi.number(),
     availableQuantity: Joi.number(),

@@ -3,7 +3,7 @@ import { UserOrder, Food } from "../schemasModle/model.js";
 export const createOrderFoodService = async ({ body }) =>
   UserOrder.create(body);
 
-export const readAllUserOrderService = async ({
+export const readAllOrderFoodService = async ({
   find = {},
   sort = "",
   limit = "",
@@ -15,19 +15,21 @@ export const readAllUserOrderService = async ({
     .limit(limit)
     .skip(skip)
     .select(select)
-    .populate(Food);
+    .populate("food");
 
-export const deleteSpecificUserOrderUserService = async ({ id }) =>
+export const deleteSpecificOrderFoodService = async ({ id }) =>
   UserOrder.findByIdAndDelete(id);
 
-export const readSpecificUserOrderUserService = async ({ id }) =>
-  UserOrder.findById(id).populate(Food);
+export const readSpecificOrderFoodService = async ({ id }) =>
+  UserOrder.findById(id).populate("food");
 
-export const readSpecificUserOrderUserByAny = async ({ email }) =>
-  UserOrder.findOne({ email }).populate(Food);
-
-export const updateSpecificUserOrderUserService = async ({ id, body }) =>
+export const updateSpecificOrderFoodService = async ({ id, body }) =>
   UserOrder.findByIdAndUpdate(id, body, {
     new: true,
     runValidators: true,
-  }).populate(Food);
+  });
+
+export const findByIdAndUpdate = async (id, update) =>
+  UserOrder.findByIdAndUpdate(id, update, { new: true, runValidators: true });
+
+export const findByIdAndDelete = async (id) => UserOrder.findByIdAndDelete(id);

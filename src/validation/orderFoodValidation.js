@@ -1,32 +1,30 @@
 import Joi from "joi";
+import { statusEnum } from "../constant/constant.js";
 
 const orderFoodSchema = Joi.object().keys({
-  foodName: Joi.string()
-    .custom((value, msg) => {
-      if (value.match(/^[a-z]{3,30}$/)) {
-        return true;
-      }
+  food: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
+    .required()
+    .messages({
+      "any.required": "foodName is required.",
+      "string.pattern.base": "foodName must be a valid ObjectId.",
+    }),
 
-      return msg.message(
-        "Food name must be in lowercase and at least 3 characters long"
-      );
-    })
-    .required(),
+  // userId: Joi.string()
+  //   .pattern(/^[0-9a-fA-F]{24}$/)
+  //   .required()
+  //   .messages({
+  //     "any.required": "userId is required.",
+  //     "string.pattern.base": "userId must be a valid ObjectId.",
+  //   }),
 
-  img: Joi.string().trim().uri(),
+  // orderStatus: Joi.string()
+  //   .valid(...Object.values(statusEnum))
+  //   .min(1)
+  //   .max(1)
+  //   .required(),
 
-  availableTime: Joi.object().keys({
-    from: Joi.date().required(),
-    to: Joi.date().required(),
-  }),
-
-  rate: Joi.number()
-    // .required()
-    .max(500),
-
-  availableQuantity: Joi.number().required().max(100),
-
-  addQuantity: Joi.number().required().max(70),
+  quantity: Joi.number().required(),
 });
 
 export default orderFoodSchema;

@@ -8,7 +8,6 @@ import categoryRouter from "./categoryRouter.js";
 import foodRouter from "./foodRouter.js";
 import orderFoodRouter from "./orderFoodRouter.js";
 
-
 // hello
 
 const apiRouter = Router();
@@ -44,9 +43,9 @@ const ourRoutes = [
     router: foodRouter,
   },
   {
-    path: `/orderFood`,
+    path: `/order-food`,
     router: orderFoodRouter,
-  }
+  },
 ];
 
 ourRoutes.forEach((route) => {

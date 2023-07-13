@@ -6,4 +6,4 @@ export * as categoryController from "./categoryController.js";
 // export * as tagsController from "./tagsController.js";
 export * as foodController from "./foodController.js";
 export * as orderFoodController from "./orderFoodController.js";
-
+export * as processOrdersController from "./processOrdersController.js";

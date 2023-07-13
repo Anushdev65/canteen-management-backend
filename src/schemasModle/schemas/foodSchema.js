@@ -4,7 +4,7 @@ import { Schema } from "mongoose";
 
 let foodSchema = Schema(
   {
-    foodName: {
+    name: {
       type: String,
       trim: true,
       unique: true,
@@ -67,7 +67,7 @@ let foodSchema = Schema(
 
 foodSchema.plugin(uniqueValidator, {
   message: function (props) {
-    return `This category '${props.value}' already exists`;
+    return `This food name '${props.value}' already exists`;
   },
 });
 

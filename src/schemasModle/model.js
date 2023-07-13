@@ -7,6 +7,7 @@ import categorySchema from "./schemas/categorySchema.js";
 // import tagsSchema from "./schemas/tagsSchema.js";
 import foodSchema from "./schemas/foodSchema.js";
 import orderFoodSchema from "./schemas/orderFoodSchema.js";
+import processOrderSchema from "./schemas/processOrders.js";
 
 export const Auth = model("Auth", authSchema);
 export const TokenData = model("TokenData", tokenSchema);
@@ -16,4 +17,4 @@ export const Category = model("Category", categorySchema);
 // export const Tags = model("Tags", tagsSchema);
 export const Food = model("Food", foodSchema);
 export const UserOrder = model("UserOrder", orderFoodSchema);
-
+export const ProcessOrders = model("ProcessOrders", processOrderSchema);
