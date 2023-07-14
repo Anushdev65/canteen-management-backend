@@ -9,7 +9,7 @@ export const statusEnum = {
   ONPROCESS: "onProcess",
   DELIVER: "delivered",
   SERVE: "served",
-  CANCEL: "canceled",
+  CANCEl: "canceled",
   EXPIRE: "expired",
 };
 

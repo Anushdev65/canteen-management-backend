@@ -82,7 +82,7 @@ orderFoodRouter
   .patch(
     isValidToken,
     isAuthorized([roleEnum.STAFF, roleEnum.CANTEEN, roleEnum.STUDENT]),
-    orderFoodController.cancelOrder
+    orderFoodController.cancelFoodOrder
   );
 
 export default orderFoodRouter;
