@@ -9,3 +9,4 @@ export * as categoryServices from "./categoryServices.js";
 export * as foodServices from "./foodServices.js";
 export * as orderFoodServices from "./orderFoodServices.js";
 export * as processOrdersServices from "./processOrdersServices.js";
+export * as addStudentDepositServices from "./addStudentDepositServices.js";

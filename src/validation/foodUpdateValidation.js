@@ -1,7 +1,7 @@
 import Joi from "joi";
 import { description, tagsEnum } from "../constant/constant.js";
 
-const foodSchema = Joi.object()
+const updateFoodSchema = Joi.object()
   .keys({
     name: Joi.string()
       .custom((value, msg) => {
@@ -13,13 +13,14 @@ const foodSchema = Joi.object()
           "Food name must be in lowercase and at least 3 characters long"
         );
       })
-      .required(),
+      .optional()
+      .allow(""),
 
-    rate: Joi.number().required().messages({
+    rate: Joi.number().optional().allow("").messages({
       "any.required": "rate is required.",
       "number.base": "rate must be a number.",
     }),
-    foodImage: Joi.string().required().messages({
+    foodImage: Joi.string().optional().allow("").messages({
       "any.required": "foodImage is required.",
       "string.base": "foodImage must be a string.",
     }),
@@ -38,9 +39,12 @@ const foodSchema = Joi.object()
       .optional()
       .allow("")
       .messages({ "string.base": "Description must be in alphabets" }),
-    category: Joi.string().required().messages({
-      "string.base": "Please enter a valid category id",
-    }),
+    category: Joi.string()
+      .messages({
+        "string.base": "Please enter a valid category id",
+      })
+      .optional()
+      .allow(""),
     tags: Joi.string()
       .valid("breakfast", "lunch", "dinner", "snacks", "all time")
       .required()
@@ -50,12 +54,12 @@ const foodSchema = Joi.object()
       }),
     isInMenu: Joi.boolean(),
     availableTime: Joi.object().keys({
-      from: Joi.date().iso().optional().allow(""),
-      to: Joi.date().iso().optional().allow(""),
+      from: Joi.string().optional().allow(""),
+      to: Joi.string().optional().allow(""),
     }),
     initialQuantity: Joi.number(),
     availableQuantity: Joi.number(),
   })
   .unknown(false);
 
-export default foodSchema;
+export default updateFoodSchema;

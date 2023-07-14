@@ -4,11 +4,10 @@ import roleRouter from "./roleRouter.js";
 import authRouter from "./authRouter.js";
 import generateMenuRouter from "./generateMenuRouter.js";
 import categoryRouter from "./categoryRouter.js";
-// import tagsRouter from "./tagsRouter.js";
+
 import foodRouter from "./foodRouter.js";
 import orderFoodRouter from "./orderFoodRouter.js";
-
-// hello
+import addStudentDepositRouter from "./addStudentDepositRouter.js";
 
 const apiRouter = Router();
 
@@ -34,13 +33,13 @@ const ourRoutes = [
     path: `/category`,
     router: categoryRouter,
   },
-  // {
-  //   path: `/tags`,
-  //   router: tagsRouter,
-  // },
   {
     path: `/food`,
     router: foodRouter,
+  },
+  {
+    path: `/add-student-deposits`,
+    router: addStudentDepositRouter,
   },
   {
     path: `/order-food`,

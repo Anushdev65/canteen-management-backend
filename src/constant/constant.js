@@ -13,7 +13,6 @@ export const statusEnum = {
   EXPIRE: "expired",
 };
 
-// export const statusEnum = ["onProcess", "delivered", "canceled", "expire"];
 export const tagsEnum = ["breakfast", "lunch", "dinner", "snacks", "all time"];
 export const HttpStatus = {
   CONTINUE: 100,

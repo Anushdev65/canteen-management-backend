@@ -64,6 +64,14 @@ let authSchema = Schema(
       type: String,
       trim: true,
     },
+    totalBalance: {
+      type: Number,
+      default: 0,
+    },
+    userId: {
+      type: Number,
+      trim:true,
+    }
   },
   { timestamps: true }
 );
