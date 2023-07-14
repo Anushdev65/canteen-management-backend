@@ -1,4 +1,6 @@
-import mongoose, { Schema } from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
+
+import { Schema } from "mongoose";
 
 let foodSchema = Schema(
   {
@@ -25,16 +27,16 @@ let foodSchema = Schema(
       type: String,
       trim: true,
     },
-    tags:[
+    tags: [
       {
-        type:String,
-      }
+        type: String,
+      },
     ],
     foodImage: {
       type: String,
       trim: true,
     },
-    
+
     isInMenu: {
       type: Boolean,
       default: false,
@@ -42,10 +44,10 @@ let foodSchema = Schema(
 
     availableTime: {
       from: {
-        type: String,
+        type: Date,
       },
       to: {
-        type: String,
+        type: Date,
       },
     },
 
@@ -62,5 +64,11 @@ let foodSchema = Schema(
 
   { timestamps: true }
 );
+
+foodSchema.plugin(uniqueValidator, {
+  message: function (props) {
+    return `This food name '${props.value}' already exists`;
+  },
+});
 
 export default foodSchema;

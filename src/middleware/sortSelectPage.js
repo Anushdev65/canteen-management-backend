@@ -131,8 +131,17 @@ export let sortFilterPagination = tryCatchWrapper(async (req, res) => {
 
   let totalDataInAPage = results.length;
 
+  // let totalResults = await service({
+  //   find: {},
+  //   sort: "",
+  //   limit: "",
+  //   skip: "",
+  //   select: "",
+  // });
+
+  // ************* if the below code doesnot work use the above totalResults code
   let totalResults = await service({
-    find: {},
+    find: find,
     sort: "",
     limit: "",
     skip: "",
