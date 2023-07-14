@@ -6,6 +6,7 @@ import { isValidToken } from "../middleware/isValidToken.js";
 import { sortFilterPagination } from "../middleware/sortSelectPage.js";
 import validation from "../middleware/validation.js";
 import foodSchema from "../validation/foodValidation.js";
+import updateFoodSchema from "../validation/foodUpdateValidation.js";
 
 const foodRouter = Router();
 
@@ -26,6 +27,7 @@ foodRouter
   .patch(
     isValidToken,
     isAuthorized([roleEnum.CANTEEN]),
+    validation(updateFoodSchema),
     foodController.updateFoodMenu
   );
 foodRouter
@@ -33,7 +35,7 @@ foodRouter
   .patch(
     isValidToken,
     isAuthorized([roleEnum.CANTEEN]),
-    // validation(foodSchema),
+    validation(updateFoodSchema),
     foodController.updateFood
   )
   .get(

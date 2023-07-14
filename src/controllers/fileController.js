@@ -1,4 +1,4 @@
-import { clientBaseUrl } from "../config/config.js";
+import { baseUrl } from "../config/config.js";
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
@@ -14,7 +14,7 @@ export const createFile = tryCatchWrapper(async (req, res) => {
     //where as other text information is given in req.body
     // let pathArray = req.file.path.split("\\"); //vvimp to split with \  use \\
     let fileName = req.file.filename;
-    let path = { path: `${clientBaseUrl}/${fileName}` };
+    let path = { path: `${baseUrl}/${fileName}` };
 
     successResponseData({
       res,
@@ -28,7 +28,7 @@ export const createFile = tryCatchWrapper(async (req, res) => {
   } else {
     let paths = req.files.map((file) => {
       let fileName = file.filename;
-      let path = `${clientBaseUrl}/${fileName}`;
+      let path = `${baseUrl}/${fileName}`;
 
       return { path: path };
     });

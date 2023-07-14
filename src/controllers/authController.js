@@ -7,6 +7,7 @@ import {
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
+import { Auth } from "../schemasModle/model.js";
 import {
   sendEmailToForgotPassword,
   sendEmailToVerify,
@@ -16,7 +17,7 @@ import { authService, tokenService } from "../services/index.js";
 import getTokenExpiryTime from "../utils/getTokenExpiryTime.js";
 import { comparePassword, hashPassword } from "../utils/hashFunction.js";
 import { throwError } from "../utils/throwError.js";
-import { generateToken, verifyToken } from "../utils/token.js";
+import { generateToken } from "../utils/token.js";
 
 // register
 //login
@@ -34,7 +35,8 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
   body.isVerify = false;
   let email = body.email;
   let user = await authService.readSpecificAuthUserByAny({ email });
-
+  let getAllUser = await Auth.find({}).count();
+  body.userId = (getAllUser || 0) + 1;
   if (user) {
     throwError({
       message: "Duplicate email.",
@@ -43,7 +45,7 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
   } else {
     let data = await authService.createAuthUserService({ body });
     delete data._doc.password;
-    let infoObj = { userId: data._id, roles: data.roles };
+    let infoObj = { userId: data._id };
 
     let token = await generateToken(infoObj, secretKey, expiryIn);
     console.log(token);
@@ -109,7 +111,7 @@ export let loginAuthUser = tryCatchWrapper(async (req, res) => {
   } else {
     let isValidPassword = await comparePassword(password, user.password);
     if (isValidPassword) {
-      let infoObj = { userId: user._id, roles: user.roles };
+      let infoObj = { userId: user._id };
       let token = await generateToken(infoObj, secretKey, expiryIn);
 
       console.log(token);
@@ -261,7 +263,6 @@ export let forgotAuthPassword = tryCatchWrapper(async (req, res) => {
   }
   let infoObj = {
     userId: user._id,
-    roles: user.roles,
   };
 
   let token = await generateToken(infoObj, secretKey, reset_expiry_in);
