@@ -30,6 +30,7 @@ foodRouter
     validation(updateFoodSchema),
     foodController.updateFoodMenu
   );
+
 foodRouter
   .route("/:id")
   .patch(

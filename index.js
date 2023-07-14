@@ -1,3 +1,5 @@
+// When you change the role it must expire token related to that particullar id
+
 import express, { json, urlencoded } from "express";
 
 import { config } from "dotenv";

@@ -5,6 +5,14 @@ export const roleEnum = {
   STAFF: "staff",
   STUDENT: "student",
 };
+export const statusEnum = {
+  ONPROCESS: "onProcess",
+  DELIVER: "delivered",
+  SERVE: "served",
+  CANCEl: "canceled",
+  EXPIRE: "expired",
+};
+
 export const tagsEnum = ["breakfast", "lunch", "dinner", "snacks", "all time"];
 export const HttpStatus = {
   CONTINUE: 100,
