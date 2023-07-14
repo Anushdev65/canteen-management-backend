@@ -9,10 +9,10 @@ let generateMenuSchema = Schema(
 
     availableTime: {
       from: {
-        type: String,
+        type: Date,
       },
       to: {
-        type: String,
+        type: Date,
       },
     },
 
@@ -25,6 +25,7 @@ let generateMenuSchema = Schema(
       type: Number,
       trim: true,
     },
+    // givenTime:{type: Date}
   },
   { timestamps: true }
 );
