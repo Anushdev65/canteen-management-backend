@@ -25,8 +25,8 @@ const foodSchema = Joi.object()
     }),
     discountedRate: Joi.number()
       .less(Joi.ref("rate"))
-      .optional()
-      .allow("")
+      .allow(null)
+      .required()
       .messages({
         "number.base": "discountedRate must be a number.",
         "number.less": "discountedRate must be less than the rate.",
@@ -35,12 +35,21 @@ const foodSchema = Joi.object()
     description: Joi.string()
       .min(3)
       .max(description.LONG)
-      .optional()
-      .allow("")
+      .required()
       .messages({ "string.base": "Description must be in alphabets" }),
+
     category: Joi.string().required().messages({
       "string.base": "Please enter a valid category id",
     }),
+    // category: Joi.string()
+    //   .required()
+    //   .custom(async (value, msg) => {
+    //     const isValidCategory = await Category.findById(value);
+    //     if (!isValidCategory) {
+    //       return msg.message("Invalid Category Id");
+    //     }
+    //     return true;
+    //   }),
     tags: Joi.string()
       .valid("breakfast", "lunch", "dinner", "snacks", "all time")
       .required()

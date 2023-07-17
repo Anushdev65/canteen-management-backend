@@ -132,9 +132,9 @@ export const serveOrder = tryCatchWrapper(async (req, res) => {
 
 export const getServedOrderByUser = tryCatchWrapper(async (req, res) => {
   // Find orders of the user with the specified status
-  const userId = req.info.userId;
+  const userId = req.params.userId;
   const orders = await UserOrder.find({
-    userId,
+    user: userId,
     orderStatus: statusEnum.SERVE,
   });
 

@@ -53,7 +53,7 @@ orderFoodRouter
   );
 
 orderFoodRouter
-  .route("/serve")
+  .route("/serve/:userId")
   .get(
     isValidToken,
     isAuthorized([roleEnum.CANTEEN, roleEnum.STAFF, roleEnum.STUDENT]),

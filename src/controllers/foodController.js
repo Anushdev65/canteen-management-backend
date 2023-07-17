@@ -1,11 +1,21 @@
 import { HttpStatus } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
-import { Food } from "../schemasModle/model.js";
+import { Food, Category } from "../schemasModle/model.js";
 import { foodServices } from "../services/index.js";
+import { throwError } from "../utils/throwError.js";
 
 export let createFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
+
+  const isValidCategory = await Category.findById(body.category);
+  if (!isValidCategory) {
+    throwError(HttpStatus.BAD_REQUEST, "Invalid category ID");
+  }
+
+  if (body.discountedRate === null || body.discountedRate === undefined) {
+    body.discountedRate = body.rate;
+  }
 
   let data = await foodServices.createFoodService({ body: body });
 
