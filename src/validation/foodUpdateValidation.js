@@ -1,5 +1,9 @@
 import Joi from "joi";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1d1a8aa14f10ba26629871c9dff20481a3631659
 const foodSchema = Joi.object()
   .keys({
     id: Joi.string().required(),

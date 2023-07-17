@@ -55,7 +55,7 @@ export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
         initialQuantity: value.initialQuantity,
         availableQuantity: value.availableQuantity,
         isInMenu: true,
-      };
+      }
       return await foodServices.updateSpecificFoodService({ id, body });
     })
   );
