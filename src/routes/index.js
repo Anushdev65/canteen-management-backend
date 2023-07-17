@@ -11,6 +11,15 @@ import addStudentDepositRouter from "./addStudentDepositRouter.js";
 
 const apiRouter = Router();
 
+// let isExpired = () => {
+//   let currentTime = new Date()
+//   let givenTime = new Date()
+//   let expiryTime = new Date()
+//   if (currentTime = <givenTime&& currentTime >= expiryTime) {
+//     return
+//   }
+// }
+
 const ourRoutes = [
   {
     path: `/auths`,
