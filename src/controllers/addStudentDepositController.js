@@ -38,7 +38,6 @@ export let createAddStudentDeposit = tryCatchWrapper(async (req, res) => {
     });
   }
 });
-
 export let updateAddStudentDeposit = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
   let id = req.params.id;

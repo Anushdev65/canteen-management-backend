@@ -2,7 +2,7 @@ import { HttpStatus, roleEnum, statusEnum } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
 import { UserOrder } from "../schemasModle/model.js";
-import { orderFoodServices } from "../services/index.js";
+import {  orderFoodServices } from "../services/index.js";
 import { throwError } from "../utils/throwError.js";
 
 export const createOrderFood = tryCatchWrapper(async (req, res) => {
