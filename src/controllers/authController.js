@@ -37,6 +37,7 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
   let user = await authService.readSpecificAuthUserByAny({ email });
   let getAllUser = await Auth.find({}).count();
   body.userId = (getAllUser || 0) + 1;
+ 
   if (user) {
     throwError({
       message: "Duplicate email.",
@@ -372,9 +373,11 @@ export let deleteSpecificAuthUser = tryCatchWrapper(async (req, res) => {
     });
   }
   let user = await authService.readSpecificAuthUserService({ id });
+  
   if (user) {
     let data = await authService.deleteSpecificAuthUserService({ id });
     delete data?._doc?.password;
+ 
     successResponseData({
       res,
       message: "User deleted successfully.",

@@ -1,7 +1,7 @@
 import { HttpStatus, roleEnum, statusEnum } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
-import { UserOrder } from "../schemasModle/model.js";
+import { Food, UserOrder } from "../schemasModle/model.js";
 import { orderFoodServices } from "../services/index.js";
 import { throwError } from "../utils/throwError.js";
 
@@ -9,7 +9,19 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
   let user = req.info.userId;
   body.user = user;
+  // const food = await Food.findOne({ name: body.foodName });
 
+  // // if (!food) {
+  // //   return res.status(HttpStatus.NOT_FOUND).json({ error: 'Food not found' });
+  // // }
+
+  // const currentTime = new Date();
+  // const fromTime = new Date(Food.availableTime.from);
+  // const toTime = new Date(Food.availableTime.to);
+
+  // if (currentTime < fromTime || currentTime > toTime) {
+  //   return res.status(HttpStatus.BAD_REQUEST).json({ error: 'Food not available at the moment' });
+  // }
   let data = await orderFoodServices.createOrderFoodService({ body: body });
 
   successResponseData({
