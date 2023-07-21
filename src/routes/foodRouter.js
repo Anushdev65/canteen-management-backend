@@ -41,7 +41,8 @@ foodRouter
   )
   .get(
     isValidToken,
-    isAuthorized([roleEnum.CANTEEN]),
+    isAuthorized([roleEnum.CANTEEN
+    ]),
     foodController.readSpecificFood
   )
   .delete(

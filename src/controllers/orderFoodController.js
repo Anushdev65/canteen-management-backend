@@ -1,15 +1,112 @@
 import { HttpStatus, roleEnum, statusEnum } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
-import { UserOrder } from "../schemasModle/model.js";
-import {  orderFoodServices } from "../services/index.js";
+import { UserOrder, Food } from "../schemasModle/model.js";
+import {
+  orderFoodServices,
+  authService,
+  foodServices,
+} from "../services/index.js";
 import { throwError } from "../utils/throwError.js";
 
 export const createOrderFood = tryCatchWrapper(async (req, res) => {
-  let body = { ...req.body };
+  let body = [...req.body];
   let user = req.info.userId;
-  body.user = user;
-  let data = await orderFoodServices.createOrderFoodService({ body: body });
+  let userData = await authService.readSpecificAuthUserService({
+    id: user,
+  });
+
+  let totalFoodBalanceArr = await Promise.all(
+    body.map(async (item, i) => {
+      let foodDetails = await foodServices.readSpecificFoodService({
+        id: item.food,
+      });
+
+      let totalFoodPrice = foodDetails.rate * item.quantity;
+
+      return totalFoodPrice;
+    })
+  );
+  // Calculate the total food balance for all items
+  let totalFoodBalance = totalFoodBalanceArr.reduce((pre, cur) => {
+    return pre + cur;
+  }, 0);
+
+  // Check if the user has sufficient balance
+  if (totalFoodBalance > userData.totalBalance) {
+    throwError({
+      message: "Insuffiecient Balance",
+      statusCode: HttpStatus.BAD_REQUEST,
+    });
+  }
+  // Update the user's total balance based on the total food balance
+  let updateTotalBalance = {
+    totalBalance: userData.totalBalance - totalFoodBalance,
+  };
+  await authService.updateSpecificAuthUserService({
+    id: user,
+    body: updateTotalBalance,
+  });
+
+  // Update the available quantity of each food item and create order food records
+  await Promise.all(
+    body.map(async (item, i) => {
+      item.user = user;
+      let foodDetails = await foodServices.readSpecificFoodService({
+        id: item.food,
+      });
+
+      // console.log("foodetails", foodDetails);
+
+      // console.log("item.quantity", item.quantity);
+      // console.log(
+      //   "foodDetails.availableQuantity",
+      //   foodDetails.availableQuantity
+      // );
+
+      // console.log("item.quantity", item.quantity);
+      // console.log(
+      //   "foodDetails.availableQuantity",
+      //   foodDetails.availableQuantity
+      // );
+
+      if (item.quantity > foodDetails.availableQuantity) {
+        throwError({
+          message: "Oder quantity is not available",
+          statusCode: HttpStatus.NOT_FOUND,
+        });
+      } else {
+        // let totalFoodPrice = foodDetails.rate * item.quantity
+        if (foodDetails.availableQuantity) {
+          // Update the availableQuantity of the food item
+          await foodServices.updateSpecificFoodService({
+            id: item.food,
+            body: {
+              availableQuantity: foodDetails.availableQuantity - item.quantity,
+            },
+          });
+          // let updateTotalBalance = {
+          //   totalBalance: userData.totalBalance - totalFoodPrice,
+          // };
+          // await authService.updateSpecificAuthUserService({
+          //   id: user,
+          //   body: updateTotalBalance,
+          // });
+
+          // await foodServices.updateSpecificFoodService({
+          //   id: item.food,
+          //   body: {
+          //     availableQuantity: foodDetails.availableQuantity - item.quantity,
+          //   },
+          // });
+        } else {
+          throwError(HttpStatus.NOT_FOUND, "Order not found");
+        }
+      }
+    })
+  );
+
+  let data = await orderFoodServices.createManyFoodService({ body: body });
 
   successResponseData({
     res,
@@ -17,6 +114,21 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
     statusCode: HttpStatus.CREATED,
     data,
   });
+
+  //   // Check if the availableQuantity of the food item is 0
+  //   // const foodItem = await Food.findByIdAndUpdate(food);
+  //   // if (foodItem && foodItem.availableQuantity <= 0) {
+  //   //   foodItem.isInMenu = false;
+  //   //   await foodItem.save();
+  //   // }
+  //   // const foodItem = await Food.findByIdAndUpdate(food);
+  //   // if (foodItem) {
+  //   //   foodItem.availableQuantity -= quantity;
+  //   //   await foodItem.save();
+  //   // }
+  // } else {
+  //   throwError(HttpStatus.NOT_FOUND, "Order not found");
+  // }
 });
 
 export const updateOrderFood = tryCatchWrapper(async (req, res) => {

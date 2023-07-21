@@ -2,6 +2,8 @@ import { UserOrder, Food } from "../schemasModle/model.js";
 
 export const createOrderFoodService = async ({ body }) =>
   UserOrder.create(body);
+export const createManyFoodService = async ({ body }) =>
+  UserOrder.insertMany(body);
 
 export const readAllOrderFoodService = async ({
   find = {},

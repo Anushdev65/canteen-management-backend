@@ -53,9 +53,9 @@ export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
       let body = {
         availableTime: value.availableTime,
         initialQuantity: value.initialQuantity,
-        availableQuantity: value.availableQuantity,
+        availableQuantity: value.initialQuantity,
         isInMenu: true,
-      }
+      };
       return await foodServices.updateSpecificFoodService({ id, body });
     })
   );
