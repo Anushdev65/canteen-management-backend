@@ -1,23 +1,39 @@
 import { HttpStatus, roleEnum, statusEnum } from "../constant/constant.js";
 import successResponseData from "../helper/successResponseData.js";
 import tryCatchWrapper from "../middleware/tryCatchWrapper.js";
-import { UserOrder } from "../schemasModle/model.js";
-import {  orderFoodServices } from "../services/index.js";
+import { Food, UserOrder } from "../schemasModle/model.js";
+import { orderFoodServices } from "../services/index.js";
 import { throwError } from "../utils/throwError.js";
 
 export const createOrderFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
   let user = req.info.userId;
   body.user = user;
-  let data = await orderFoodServices.createOrderFoodService({ body: body });
+  let foodId = req.body.food
+  let food = await Food.findById(foodId);
+  const currentDate = new Date()
+  if (currentDate >= food.availableTime.from && currentDate <= food.availableTime.to) {
 
-  successResponseData({
-    res,
-    message: "Your order has been placed",
-    statusCode: HttpStatus.CREATED,
-    data,
-  });
-});
+    let data = await orderFoodServices.createOrderFoodService({ body: body });
+
+    successResponseData({
+      res,
+      message: "Your order has been placed",
+      statusCode: HttpStatus.CREATED,
+      data,
+    });
+  }
+  else {
+    throwError({
+      message: "Food is not available at the current time .",
+      statusCode: HttpStatus.BAD_REQUEST,
+    })
+  }
+  })
+
+
+ 
+
 
 export const updateOrderFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
