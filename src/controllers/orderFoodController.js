@@ -9,28 +9,31 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
   let user = req.info.userId;
   body.user = user;
-  // const food = await Food.findOne({ name: body.foodName });
+  let foodId = req.body.food
+  let food = await Food.findById(foodId);
+  const currentDate = new Date()
+  if (currentDate >= food.availableTime.from && currentDate <= food.availableTime.to) {
 
-  // // if (!food) {
-  // //   return res.status(HttpStatus.NOT_FOUND).json({ error: 'Food not found' });
-  // // }
+    let data = await orderFoodServices.createOrderFoodService({ body: body });
 
-  // const currentTime = new Date();
-  // const fromTime = new Date(Food.availableTime.from);
-  // const toTime = new Date(Food.availableTime.to);
+    successResponseData({
+      res,
+      message: "Your order has been placed",
+      statusCode: HttpStatus.CREATED,
+      data,
+    });
+  }
+  else {
+    throwError({
+      message: "Food is not available at the current time .",
+      statusCode: HttpStatus.BAD_REQUEST,
+    })
+  }
+  })
 
-  // if (currentTime < fromTime || currentTime > toTime) {
-  //   return res.status(HttpStatus.BAD_REQUEST).json({ error: 'Food not available at the moment' });
-  // }
-  let data = await orderFoodServices.createOrderFoodService({ body: body });
 
-  successResponseData({
-    res,
-    message: "Your order has been placed",
-    statusCode: HttpStatus.CREATED,
-    data,
-  });
-});
+ 
+
 
 export const updateOrderFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
