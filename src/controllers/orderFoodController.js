@@ -344,19 +344,25 @@ export const makeOrderDelivered = tryCatchWrapper(async (req, res) => {
 // });
 
 export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
-  const id = req.params.orderId;
-  const roles = req.info.roles;
+  const id = req.params.orderId; //order id
+  const roles = req.info.roles; //login roles
+
+  const order = await orderFoodServices.readSpecificOrderFoodService({ id }); //order details
 
   let userData = await authService.readSpecificAuthUserService({
-    id: req.info.userId,
-  });
+    id: order.user,
+  }); //ordered userid
+
+  // user
 
   if (roles.includes(roleEnum.CANTEEN)) {
-    const order = await orderFoodServices.readSpecificOrderFoodService({ id });
-    console.log(order);
+    console.log("**************", order);
 
     // Check if the current status is "SERVE"
-    if (order.orderStatus === statusEnum.SERVE) {
+    if (
+      order.orderStatus !== statusEnum.DELIVER ||
+      order.orderStatus !== statusEnum.EXPIRE
+    ) {
       // Update the order status to "CANCEL"
 
       await orderFoodServices.updateSpecificOrderFoodService({
@@ -370,12 +376,12 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
         totalBalance: userData.totalBalance + order.quantity * order.food.rate,
       };
       await authService.updateSpecificAuthUserService({
-        id: user,
+        id: order.user,
         body: updateTotalBalance,
       });
 
       await foodServices.updateSpecificFoodService({
-        id: item.food,
+        id: order.food._id,
         body: {
           availableQuantity: order.quantity + order.food.availableQuantity,
         },
@@ -390,8 +396,6 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
     roles.includes(roleEnum.STAFF) ||
     roles.includes(roleEnum.STUDENT)
   ) {
-    const order = await orderFoodServices.readSpecificOrderFoodService({ id });
-
     // Check if the current status is "ONPROCESS"
     if (order.orderStatus === statusEnum.ONPROCESS) {
       // Update the order status to "CANCEL"
@@ -407,7 +411,7 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
         totalBalance: userData.totalBalance + restoredAmount,
       };
       await authService.updateSpecificAuthUserService({
-        id: req.info.userId,
+        id: order.user,
         body: updateTotalBalance,
       });
 
