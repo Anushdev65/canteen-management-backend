@@ -100,7 +100,10 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
           //   },
           // });
         } else {
-          throwError(HttpStatus.NOT_FOUND, "Order not found");
+          throwError({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: "Order not found",
+          });
         }
       }
     })
@@ -187,12 +190,18 @@ export const serveOrder = tryCatchWrapper(async (req, res) => {
   const order = await UserOrder.findById(orderId);
 
   if (!order) {
-    throwError(HttpStatus.NOT_FOUND, "Order not found");
+    throwError({
+      statusCode: HttpStatus.NOT_FOUND,
+      message: "Order not found",
+    });
   }
 
   // Cannot serve if the order has been canceled
   if (order.orderStatus === statusEnum.CANCEl) {
-    throwError(HttpStatus.BAD_REQUEST, "Cannot serve a canceled order");
+    throwError({
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: "Cannot serve canceled order",
+    });
   }
 
   const updatedOrders = await UserOrder.updateOne(
@@ -201,7 +210,10 @@ export const serveOrder = tryCatchWrapper(async (req, res) => {
   );
 
   if (!updatedOrders) {
-    throwError(HttpStatus.NOT_FOUND, "Orders not found");
+    throwError({
+      statusCode: HttpStatus.NOT_FOUND,
+      message: "Order not found",
+    });
   }
 
   successResponseData({
@@ -251,7 +263,10 @@ export const getServedOrderByUser = tryCatchWrapper(async (req, res) => {
   });
 
   if (!orders) {
-    throwError(HttpStatus.NOT_FOUND, "Orders Not Found");
+    throwError({
+      statusCode: HttpStatus.NOT_FOUND,
+      message: "Order not found",
+    });
   }
 
   successResponseData({
@@ -283,10 +298,16 @@ export const makeOrderDelivered = tryCatchWrapper(async (req, res) => {
         data: order,
       });
     } else {
-      throwError(HttpStatus.UNAUTHORIZED, "Unauthorized access");
+      throwError({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: "Unauthoried access",
+      });
     }
   } else {
-    throwError(HttpStatus.BAD_REQUEST, "Order cannot be delivered");
+    throwError({
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: "Order cannot be delivered",
+    });
   }
 });
 
@@ -326,18 +347,44 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
   const id = req.params.orderId;
   const roles = req.info.roles;
 
+  let userData = await authService.readSpecificAuthUserService({
+    id: req.info.userId,
+  });
+
   if (roles.includes(roleEnum.CANTEEN)) {
     const order = await orderFoodServices.readSpecificOrderFoodService({ id });
+    console.log(order);
 
     // Check if the current status is "SERVE"
     if (order.orderStatus === statusEnum.SERVE) {
       // Update the order status to "CANCEL"
+
       await orderFoodServices.updateSpecificOrderFoodService({
         id,
-        body: { orderStatus: statusEnum.CANCEl },
+        body: {
+          orderStatus: statusEnum.CANCEl,
+        },
+      });
+
+      let updateTotalBalance = {
+        totalBalance: userData.totalBalance + order.quantity * order.food.rate,
+      };
+      await authService.updateSpecificAuthUserService({
+        id: user,
+        body: updateTotalBalance,
+      });
+
+      await foodServices.updateSpecificFoodService({
+        id: item.food,
+        body: {
+          availableQuantity: order.quantity + order.food.availableQuantity,
+        },
       });
     } else {
-      throwError(HttpStatus.BAD_REQUEST, "Order cannot be canceled");
+      throwError({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: "Order cannot be canceled",
+      });
     }
   } else if (
     roles.includes(roleEnum.STAFF) ||
@@ -352,8 +399,30 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
         id,
         body: { orderStatus: statusEnum.CANCEl },
       });
+
+      let restoredAmount = order.quantity * order.food.rate;
+
+      // Update the user's total balance by adding the restored amount
+      let updateTotalBalance = {
+        totalBalance: userData.totalBalance + restoredAmount,
+      };
+      await authService.updateSpecificAuthUserService({
+        id: req.info.userId,
+        body: updateTotalBalance,
+      });
+
+      // Update the availableQuantity of the food item by adding the order quantity
+      await foodServices.updateSpecificFoodService({
+        id: order.food._id,
+        body: {
+          availableQuantity: order.food.availableQuantity + order.quantity,
+        },
+      });
     } else {
-      throwError(HttpStatus.BAD_REQUEST, "Order cannot be canceled");
+      throwError({
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: "Order cannot be canceled",
+      });
     }
   }
   successResponseData({
@@ -362,6 +431,94 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
     statusCode: HttpStatus.OK,
   });
 });
+
+// export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
+//   const id = req.params.orderId;
+//   const roles = req.info.roles;
+
+//   let userData = await authService.readSpecificAuthUserService({
+//     id: req.info.userId,
+//   });
+
+//   if (roles.includes(roleEnum.CANTEEN)) {
+//     const order = await orderFoodServices.readSpecificOrderFoodService({ id });
+//     console.log(order);
+
+//     // Check if the current status is "SERVE"
+//     if (order.orderStatus === statusEnum.SERVE) {
+//       // Update the order status to "CANCEL"
+
+//       await orderFoodServices.updateSpecificOrderFoodService({
+//         id,
+//         body: {
+//           orderStatus: statusEnum.CANCEl,
+//         },
+//       });
+
+//       let updateTotalBalance = {
+//         totalBalance: userData.totalBalance + order.quantity * order.food.rate,
+//       };
+//       await authService.updateSpecificAuthUserService({
+//         id: user,
+//         body: updateTotalBalance,
+//       });
+
+//       await foodServices.updateSpecificFoodService({
+//         id: item.food,
+//         body: {
+//           availableQuantity: order.quantity + order.food.availableQuantity,
+//         },
+//       });
+//     } else {
+//       throwError({
+//         statusCode: HttpStatus.BAD_REQUEST,
+//         message: "Order cannot be canceled",
+//       });
+//     }
+//   } else if (
+//     roles.includes(roleEnum.STAFF) ||
+//     roles.includes(roleEnum.STUDENT)
+//   ) {
+//     const order = await orderFoodServices.readSpecificOrderFoodService({ id });
+
+//     // Check if the current status is "ONPROCESS"
+//     if (order.orderStatus === statusEnum.ONPROCESS) {
+//       // Update the order status to "CANCEL"
+//       await orderFoodServices.updateSpecificOrderFoodService({
+//         id,
+//         body: { orderStatus: statusEnum.CANCEl },
+//       });
+//       let restoredAmount = order.quantity * order.food.rate;
+
+//       // Update the user's total balance by adding the restored amount
+//       let updateTotalBalance = {
+//         totalBalance: userData.totalBalance + restoredAmount,
+//       };
+//       await authService.updateSpecificAuthUserService({
+//         id: req.info.userId,
+//         body: updateTotalBalance,
+//       });
+
+//       // Update the availableQuantity of the food item by adding the order quantity
+//       await foodServices.updateSpecificFoodService({
+//         id: order.food._id,
+//         body: {
+//           availableQuantity: order.food.availableQuantity + order.quantity,
+//         },
+//       });
+//     } else {
+//       throwError({
+//         statusCode: HttpStatus.BAD_REQUEST,
+//         message: "Order cannot be canceled",
+//       });
+//     }
+//   }
+//   successResponseData({
+//     res,
+//     message: "Order has been canceled",
+//     statusCode: HttpStatus.OK,
+//   });
+// });
 
 // export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
 //   const id = req.params.orderId;

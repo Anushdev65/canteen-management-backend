@@ -70,8 +70,9 @@ let authSchema = Schema(
     },
     userId: {
       type: Number,
-      trim:true,
-    }
+      trim: true,
+      unique: true,
+    },
   },
   { timestamps: true }
 );

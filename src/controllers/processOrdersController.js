@@ -15,7 +15,10 @@ export let createProcessOrders = tryCatchWrapper(async (req, res) => {
   ]);
 
   if (!orderFood) {
-    throwError(HttpStatus.NOT_FOUND, "Order food not found");
+    throwError({
+      message: "Order food not found",
+      statusCode: HttpStatus.NOT_FOUND,
+    });
   }
 
   const processOrder = await processOrdersServices.createProcessOrdersService({

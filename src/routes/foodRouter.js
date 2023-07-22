@@ -7,8 +7,11 @@ import { sortFilterPagination } from "../middleware/sortSelectPage.js";
 import validation from "../middleware/validation.js";
 import foodSchema from "../validation/foodValidation.js";
 import updateFoodSchema from "../validation/foodUpdateValidation.js";
+import foodUpdate from "../validation/updateFoodValidation.js";
 
 const foodRouter = Router();
+
+// AddQuantity
 
 foodRouter
   .route("/")
@@ -32,17 +35,24 @@ foodRouter
   );
 
 foodRouter
+  .route("/add-quantity/:id")
+  .patch(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN]),
+    foodController.addQuantity
+  );
+
+foodRouter
   .route("/:id")
   .patch(
     isValidToken,
     isAuthorized([roleEnum.CANTEEN]),
-    validation(updateFoodSchema),
+    validation(foodUpdate),
     foodController.updateFood
   )
   .get(
     isValidToken,
-    isAuthorized([roleEnum.CANTEEN
-    ]),
+    isAuthorized([roleEnum.CANTEEN]),
     foodController.readSpecificFood
   )
   .delete(

@@ -1,13 +1,13 @@
 import { Router } from "express";
-import fileUploadRouter from "./fileUpload.js";
-import roleRouter from "./roleRouter.js";
 import authRouter from "./authRouter.js";
-import generateMenuRouter from "./generateMenuRouter.js";
 import categoryRouter from "./categoryRouter.js";
+import fileUploadRouter from "./fileUpload.js";
+import generateMenuRouter from "./generateMenuRouter.js";
+import roleRouter from "./roleRouter.js";
 
+import addStudentDepositRouter from "./addStudentDepositRouter.js";
 import foodRouter from "./foodRouter.js";
 import orderFoodRouter from "./orderFoodRouter.js";
-import addStudentDepositRouter from "./addStudentDepositRouter.js";
 
 const apiRouter = Router();
 
