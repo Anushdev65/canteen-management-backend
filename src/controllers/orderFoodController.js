@@ -166,6 +166,7 @@ export const readSpecificOrderFood = tryCatchWrapper(async (req, res) => {
 
 export const readAllOrderFood = tryCatchWrapper(async (req, res, next) => {
   let find = {};
+
   req.find = find;
   req.service = orderFoodServices.readAllOrderFoodService;
 
