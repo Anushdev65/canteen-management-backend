@@ -9,7 +9,10 @@ export let createAddStudentDeposit = tryCatchWrapper(async (req, res) => {
   let id = req.params.id;
 
   let user = await authService.readSpecificAuthUserService({ id });
-  if (Object.keys(user).length && user.roles.includes(roleEnum.STUDENT)) {
+  if (
+    (Object.keys(user).length && user.roles.includes(roleEnum.STUDENT)) ||
+    user.roles.includes(roleEnum.STAFF)
+  ) {
     let body = { ...req.body, user: id };
 
     let getAllDepositLength = await AddStudentDeposit.find({}).count();

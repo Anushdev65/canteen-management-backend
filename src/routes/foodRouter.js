@@ -11,6 +11,8 @@ import foodUpdate from "../validation/updateFoodValidation.js";
 
 const foodRouter = Router();
 
+// AddQuantity
+
 foodRouter
   .route("/")
   .post(
@@ -30,6 +32,14 @@ foodRouter
     isAuthorized([roleEnum.CANTEEN]),
     validation(updateFoodSchema),
     foodController.updateFoodMenu
+  );
+
+foodRouter
+  .route("/add-quantity/:id")
+  .patch(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN]),
+    foodController.addQuantity
   );
 
 foodRouter

@@ -15,7 +15,7 @@ orderFoodRouter
   .post(
     isValidToken,
     isAuthorized([roleEnum.STAFF, roleEnum.STUDENT]),
-    validation(orderFoodSchema),
+    // validation(orderFoodSchema),
     orderFoodController.createOrderFood
   )
   .get(
@@ -24,10 +24,9 @@ orderFoodRouter
     orderFoodController.readAllOrderFood,
     sortFilterPagination
   )
-
   .patch(
     isValidToken,
-    isAuthorized([roleEnum.STAFF]),
+    isAuthorized([roleEnum.STAFF, roleEnum.STUDENT]),
     validation(orderFoodSchema),
     orderFoodController.updateOrderFood
   );

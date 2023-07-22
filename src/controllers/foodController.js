@@ -10,7 +10,10 @@ export let createFood = tryCatchWrapper(async (req, res) => {
 
   const isValidCategory = await Category.findById(body.category);
   if (!isValidCategory) {
-    throwError(HttpStatus.BAD_REQUEST, "Invalid category ID");
+    throwError({
+      statusCode: HttpStatus.BAD_REQUEST,
+      message: "Category Id not found",
+    });
   }
 
   if (body.discountedRate === null || body.discountedRate === undefined) {
@@ -46,16 +49,16 @@ export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
   });
 
   await Food.updateMany({ _id: { $nin: ids } }, { isInMenu: false });
-
   let _data = await Promise.all(
     req.body.map(async (value, i) => {
       let id = value.id;
       let body = {
         availableTime: value.availableTime,
         initialQuantity: value.initialQuantity,
-        availableQuantity: value.availableQuantity,
+        availableQuantity: value.initialQuantity,
         isInMenu: true,
-      }
+      };
+
       return await foodServices.updateSpecificFoodService({ id, body });
     })
   );
@@ -97,6 +100,44 @@ export let deleteSpecificFood = tryCatchWrapper(async (req, res) => {
     res,
     message: "Food delete successfully.",
     statusCode: HttpStatus.OK,
+    data,
+  });
+});
+
+export let addQuantity = tryCatchWrapper(async (req, res) => {
+  const foodId = req.params.id;
+  const { quantity } = req.body;
+
+  const foodItem = await foodServices.readSpecificFoodService({ id: foodId });
+
+  if (foodItem.initialQuantity === 0 && quantity < 0) {
+    // throwError(HttpStatus.NOT_FOUND, "food quantity can not be negative");
+    throwError({
+      message: "food quantity can not be negative",
+      statusCode: HttpStatus.NOT_FOUND,
+    });
+  }
+
+  if (!foodItem) {
+    throwError({
+      statusCode: HttpStatus.NOT_FOUND,
+      message: "Food item not found",
+    });
+  }
+  let updateData = {
+    initialQuantity: foodItem.initialQuantity + quantity,
+    availableQuantity: foodItem.availableQuantity + quantity,
+  };
+
+  let data = await foodServices.updateSpecificFoodService({
+    id: foodId,
+    body: updateData,
+  });
+
+  successResponseData({
+    res,
+    message: "Quantity updated sucessfully",
+    statusCode: HttpStatus.CREATED,
     data,
   });
 });

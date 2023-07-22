@@ -26,7 +26,7 @@ const foodSchema = Joi.object()
     discountedRate: Joi.number()
       .less(Joi.ref("rate"))
       .allow(null)
-      .required()
+      .optional()
       .messages({
         "number.base": "discountedRate must be a number.",
         "number.less": "discountedRate must be less than the rate.",
