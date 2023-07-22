@@ -23,7 +23,7 @@ foodRouter
   )
   .get(
     isValidToken,
-    isAuthorized([roleEnum.CANTEEN]),
+    isAuthorized([roleEnum.CANTEEN, roleEnum.STAFF, roleEnum.STUDENT]),
     foodController.readAllFood,
     sortFilterPagination
   )
