@@ -24,6 +24,9 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
 
       let totalFoodPrice = foodDetails.rate * item.quantity;
 
+      //Save the totalprice in orderFood model
+      // item.totalFoodPrice = totalFoodPrice;
+
       return totalFoodPrice;
     })
   );

@@ -11,9 +11,19 @@ const categoryRouter = Router();
 
 categoryRouter
   .route("/")
-  .post(isValidToken,isAuthorized([roleEnum.CANTEEN]),validation(categorySchema),categoryController.createCategory)
-  .get(isValidToken,isAuthorized([roleEnum.CANTEEN]),categoryController.readAllCategory, sortFilterPagination);
- 
+  .post(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN]),
+    validation(categorySchema),
+    categoryController.createCategory
+  )
+  .get(
+    isValidToken,
+    isAuthorized([roleEnum.CANTEEN, roleEnum.STAFF, roleEnum.STUDENT]),
+    categoryController.readAllCategory,
+    sortFilterPagination
+  );
+
 categoryRouter
   .route("/:id")
   .patch(

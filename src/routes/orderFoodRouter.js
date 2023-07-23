@@ -70,6 +70,7 @@ orderFoodRouter
 
 orderFoodRouter
   .route("/deliver/:id")
+  .get()
   .patch(
     isValidToken,
     isAuthorized([roleEnum.CANTEEN]),
