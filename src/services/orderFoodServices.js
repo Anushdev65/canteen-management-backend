@@ -17,13 +17,14 @@ export const readAllOrderFoodService = async ({
     .limit(limit)
     .skip(skip)
     .select(select)
-    .populate("food");
+    .populate("food")
+    .populate("user");
 
 export const deleteSpecificOrderFoodService = async ({ id }) =>
   UserOrder.findByIdAndDelete(id);
 
 export const readSpecificOrderFoodService = async ({ id }) =>
-  UserOrder.findById(id).populate("food");
+  UserOrder.findById(id).populate("food").populate("user");
 
 export const updateSpecificOrderFoodService = async ({ id, body }) =>
   UserOrder.findByIdAndUpdate(id, body, {
