@@ -170,6 +170,16 @@ export const readSpecificOrderFood = tryCatchWrapper(async (req, res) => {
 
 export const readAllOrderFood = tryCatchWrapper(async (req, res, next) => {
   let find = {};
+
+  let start = new Date();
+  start.setHours(0, 0, 0, 0);
+
+  var end = new Date();
+  // end.setHours(23, 59, 59, 999);
+
+  console.log("***start", start);
+  console.log("***end", end);
+
   if (req.query.today === "true") {
     find.createdAt = {
       $gte: currentDayStartOf(),
@@ -183,6 +193,8 @@ export const readAllOrderFood = tryCatchWrapper(async (req, res, next) => {
     find.orderStatus = req.query.orderStatus;
   }
   req.find = find;
+
+  console.log("******", req.find);
   req.service = orderFoodServices.readAllOrderFoodService;
 
   next();
