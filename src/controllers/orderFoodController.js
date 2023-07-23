@@ -7,6 +7,7 @@ import {
   authService,
   foodServices,
 } from "../services/index.js";
+import { currentDayEndOf, currentDayStartOf } from "../utils/datemethod.js";
 import { throwError } from "../utils/throwError.js";
 
 export const createOrderFood = tryCatchWrapper(async (req, res) => {
@@ -38,7 +39,7 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
   // Check if the user has sufficient balance
   if (totalFoodBalance > userData.totalBalance) {
     throwError({
-      message: "Insuffiecient Balance",
+      message: "Insufficient Balance",
       statusCode: HttpStatus.BAD_REQUEST,
     });
   }
@@ -169,7 +170,18 @@ export const readSpecificOrderFood = tryCatchWrapper(async (req, res) => {
 
 export const readAllOrderFood = tryCatchWrapper(async (req, res, next) => {
   let find = {};
-
+  if (req.query.today === "true") {
+    find.createdAt = {
+      $gte: currentDayStartOf(),
+      $lte: currentDayEndOf(),
+    };
+  }
+  if (req.query.user) {
+    find.user = req.query.user;
+  }
+  if (req.query.orderStatus) {
+    find.orderStatus = req.query.orderStatus;
+  }
   req.find = find;
   req.service = orderFoodServices.readAllOrderFoodService;
 
