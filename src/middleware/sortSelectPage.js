@@ -106,18 +106,18 @@ export let sortFilterPagination = tryCatchWrapper(async (req, res) => {
 
   // for sorting
 
-  let {
-    _brake: __brake,
-    _limit: __limit,
-    _select: __select,
-    _sort: __sort,
-    ...rest
-  } = req.query || {};
-  let find = { ...rest, ...req.find } || {};
+  // let {
+  //   _brake: __brake,
+  //   _limit: __limit,
+  //   _select: __select,
+  //   _sort: __sort,
+  //   ...rest
+  // } = req.query || {};
+  // let find = { ...rest, ...req.find } || {};
 
-  console.log(find);
+  // console.log(find);
 
-  // let find = req.find || {};
+  let find = req.find || {};
   let service = req.service;
   let myOwnSelect = req.myOwnSelect;
   let sort = sortingFun(req.query._sort);
