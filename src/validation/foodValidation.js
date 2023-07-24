@@ -5,15 +5,16 @@ const foodSchema = Joi.object()
   .keys({
     name: Joi.string()
       .custom((value, msg) => {
-        if (value.match(/^[a-z]{3,30}( [a-z]{3,30}){0,2}$/)) {
+        if (value.match(/^[a-zA-Z]{3,30}( [a-zA-Z]{3,30}){0,2}$/)) {
           return true;
         }
 
         return msg.message(
-          "Food name must be in lowercase and at least 3 characters long"
+          "Food name must begin with a letter and have a minimum of three characters"
         );
       })
-      .required(),
+      .required()
+      .lowercase(),
 
     rate: Joi.number().required().messages({
       "any.required": "rate is required.",
