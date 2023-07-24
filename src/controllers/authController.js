@@ -68,7 +68,7 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
 
     successResponseData({
       res,
-      message: "User Created Successfully.",
+      message: "Verification mail has been sent.",
       statusCode: HttpStatus.CREATED,
       data,
     });
