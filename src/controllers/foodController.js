@@ -52,10 +52,25 @@ export let updateFoodMenu = tryCatchWrapper(async (req, res) => {
   let _data = await Promise.all(
     req.body.map(async (value, i) => {
       let id = value.id;
+      let foodDetails = await foodServices.readSpecificFoodService({ id });
+      // console.log("foodDetails", foodDetails);
+
+      let availableQuantity =
+        (foodDetails.availableQuantity || 0) +
+          ((value.initialQuantity || 0) - (foodDetails.initialQuantity || 0)) ||
+        0;
+
+      if (availableQuantity < 0 || value.initialQuantity < 0) {
+        throwError({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: "Quantity can not be negative.",
+        });
+      }
+
       let body = {
         availableTime: value.availableTime,
         initialQuantity: value.initialQuantity,
-        availableQuantity: value.initialQuantity,
+        availableQuantity: availableQuantity,
         isInMenu: true,
       };
 
