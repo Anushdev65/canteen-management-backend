@@ -10,7 +10,7 @@ const updateUserByAdminSchema = Joi.object({
 
   lastName: Joi.string()
     .regex(/^[a-zA-Z]*$/)
-    .min(3)
+    .min(2)
     .max(30)
     .trim(),
 

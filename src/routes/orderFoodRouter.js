@@ -64,7 +64,7 @@ orderFoodRouter
   .route("/serve/:id")
   .patch(
     isValidToken,
-    isAuthorized([roleEnum.STAFF, roleEnum.STUDENT]),
+    isAuthorized([roleEnum.STAFF, roleEnum.STUDENT, roleEnum.CANTEEN]),
     orderFoodController.serveOrder
   );
 

@@ -68,7 +68,7 @@ export let createAuthUser = tryCatchWrapper(async (req, res) => {
 
     successResponseData({
       res,
-      message: "User Created Successfully.",
+      message: "Verification mail has been sent.",
       statusCode: HttpStatus.CREATED,
       data,
     });
@@ -330,6 +330,10 @@ export let resetAuthPassword = tryCatchWrapper(async (req, res) => {
 
 export let readAllAuthUser = tryCatchWrapper(async (req, res, next) => {
   let find = {};
+
+  if (req.query.userId) {
+    find.userId = req.query.userId;
+  }
 
   if (req.query.email) {
     find.email = { $regex: req.query.email, $options: "i" };

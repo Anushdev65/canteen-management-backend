@@ -28,7 +28,7 @@ const authSchema = Joi.object()
     // lets assume if name field is added teh lastName must be required other wise it is not
     lastName: Joi.string()
       .regex(/^[a-zA-Z]*$/)
-      .min(3)
+      .min(2)
       .max(30)
       .required()
       .messages({ "string.base": "Last name must be in alphabet" }),
