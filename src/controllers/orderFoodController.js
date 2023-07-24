@@ -23,7 +23,14 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
         id: item.food,
       });
 
-      let totalFoodPrice = foodDetails.rate * item.quantity;
+      let price;
+      if (req.info.roles.includes(roleEnum.STUDENT)) {
+        price = foodDetails.discountedRate;
+      } else {
+        price = foodDetails.rate;
+      }
+
+      let totalFoodPrice = price * item.quantity;
 
       //Save the totalprice in orderFood model
       // item.totalFoodPrice = totalFoodPrice;
@@ -37,20 +44,25 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
   }, 0);
 
   // Check if the user has sufficient balance
-  if (totalFoodBalance > userData.totalBalance) {
+  if (
+    !req.info.roles.includes(roleEnum.STAFF) &&
+    totalFoodBalance > userData.totalBalance
+  ) {
     throwError({
       message: "Insufficient Balance",
       statusCode: HttpStatus.BAD_REQUEST,
     });
   }
   // Update the user's total balance based on the total food balance
-  let updateTotalBalance = {
-    totalBalance: userData.totalBalance - totalFoodBalance,
-  };
-  await authService.updateSpecificAuthUserService({
-    id: user,
-    body: updateTotalBalance,
-  });
+  if (!req.info.roles.includes(roleEnum.STAFF)) {
+    let updateTotalBalance = {
+      totalBalance: userData.totalBalance - totalFoodBalance,
+    };
+    await authService.updateSpecificAuthUserService({
+      id: user,
+      body: updateTotalBalance,
+    });
+  }
 
   // Update the available quantity of each food item and create order food records
   await Promise.all(
@@ -585,3 +597,5 @@ export const readMyOrder = tryCatchWrapper(async (req, res, next) => {
 
   next();
 });
+
+export const expiryOrder = tryCatchWrapper(async (req, res) => {});
