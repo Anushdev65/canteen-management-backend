@@ -588,11 +588,17 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
 // });
 
 export const readMyOrder = tryCatchWrapper(async (req, res, next) => {
-  let find = { user: req.info.userId };
+  let find = {};
+  find.user = req.info.userId;
+  if (req.query.today === "true") {
+    find.createdAt = {
+      $gte: currentDayStartOf(),
+      $lte: currentDayEndOf(),
+    };
+  }
 
-  console.log("*******", find);
   req.find = find;
-  console.log("*******", req.find);
+
   req.service = orderFoodServices.readAllOrderFoodService;
 
   next();
