@@ -24,11 +24,11 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
       });
 
       let price;
-      if (req.info.roles.includes(roleEnum.STUDENT)) {
-        price = foodDetails.discountedRate;
-      } else {
+      // if (req.info.roles.includes(roleEnum.STUDENT)) {
+      //   price = foodDetails.discountedRate;
+      // } else {
         price = foodDetails.rate;
-      }
+      // }
 
       let totalFoodPrice = price * item.quantity;
 
