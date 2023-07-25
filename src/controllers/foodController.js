@@ -100,7 +100,14 @@ export let readSpecificFood = tryCatchWrapper(async (req, res) => {
 });
 
 export let readAllFood = tryCatchWrapper(async (req, res, next) => {
+  let showTodayMenu = req.query.showTodayMenu
   let find = {};
+  if (showTodayMenu==="true")
+  {
+       find.isInMenu=showTodayMenu
+  }
+  
+ 
   req.find = find;
   req.service = foodServices.readAllFoodService;
 

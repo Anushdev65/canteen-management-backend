@@ -24,11 +24,11 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
       });
 
       let price;
-      if (req.info.roles.includes(roleEnum.STUDENT)) {
-        price = foodDetails.discountedRate;
-      } else {
+      // if (req.info.roles.includes(roleEnum.STUDENT)) {
+      //   price = foodDetails.discountedRate;
+      // } else {
         price = foodDetails.rate;
-      }
+      // }
 
       let totalFoodPrice = price * item.quantity;
 
@@ -590,7 +590,14 @@ export const cancelFoodOrder = tryCatchWrapper(async (req, res) => {
 // });
 
 export const readMyOrder = tryCatchWrapper(async (req, res, next) => {
-  let find = { user: req.info.userId };
+  let find = {};
+  find.user = req.info.userId;
+  if (req.query.today === "true") {
+    find.createdAt = {
+      $gte: currentDayStartOf(),
+      $lte: currentDayEndOf(),
+    };
+  }
 
   req.find = find;
   req.service = orderFoodServices.readAllOrderFoodService;
