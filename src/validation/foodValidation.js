@@ -30,7 +30,6 @@ const foodSchema = Joi.object()
       "any.required": "discountedRate is required.",
     }),
 
-  
     description: Joi.string()
       .min(3)
       .max(description.LONG)
