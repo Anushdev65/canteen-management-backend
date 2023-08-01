@@ -9,6 +9,7 @@ import foodSchema from "./schemas/foodSchema.js";
 import orderFoodSchema from "./schemas/orderFoodSchema.js";
 import processOrderSchema from "./schemas/processOrders.js";
 import addStudentDepositSchema from "./schemas/addStudentDepositSchema.js";
+import transctionReportSchema from "./schemas/transactionReport.js";
 
 export const Auth = model("Auth", authSchema);
 export const TokenData = model("TokenData", tokenSchema);
@@ -21,4 +22,8 @@ export const ProcessOrders = model("ProcessOrders", processOrderSchema);
 export const AddStudentDeposit = model(
   "AddStudentDeposit",
   addStudentDepositSchema
+);
+export const transctionReport = model(
+  "transctionReport",
+  transctionReportSchema
 );
