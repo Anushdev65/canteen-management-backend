@@ -85,13 +85,13 @@ orderFoodRouter
     orderFoodController.cancelFoodOrder
   );
 
-orderFoodRouter
-  .route("/transaction-reports/:userId")
-  .get(
-    isValidToken,
-    isAuthorized([roleEnum.STAFF, roleEnum.STUDENT]),
-    orderFoodController.getTransactionReports,
-    sortFilterPagination
-  );
+// orderFoodRouter
+//   .route("/transaction-reports/:userId")
+//   .get(
+//     isValidToken,
+//     isAuthorized([roleEnum.STAFF, roleEnum.STUDENT]),
+//     orderFoodController.getTransactionReports,
+//     sortFilterPagination
+//   );
 
 export default orderFoodRouter;

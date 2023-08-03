@@ -65,10 +65,9 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
     });
   }
 
-  const reportData = await createTransactionReportData(user, totalFoodBalance);
+  // const reportData = await createTransactionReportData(user, totalFoodBalance);
 
-  await transctionReport.create(reportData);
-
+  // await transctionReport.create(reportData);
 
   // Update the available quantity of each food item and create order food records
   await Promise.all(
@@ -156,54 +155,54 @@ export const createOrderFood = tryCatchWrapper(async (req, res) => {
   // }
 });
 
-export const createTransactionReportData = async (userId, totalExpense) => {
-  try {
-    // Retrieve the necessary user data
-    const userData = await authService.readSpecificAuthUserService({
-      id: userId,
-    });
+// export const createTransactionReportData = async (userId, totalExpense) => {
+//   try {
+//     // Retrieve the necessary user data
+//     const userData = await authService.readSpecificAuthUserService({
+//       id: userId,
+//     });
 
-    // Calculate the total balance after deducting the totalExpense
-    const totalBalance = userData.totalBalance - totalExpense;
+//     // Calculate the total balance after deducting the totalExpense
+//     const totalBalance = userData.totalBalance - totalExpense;
 
-    // Create the transaction report
-    const reportData = {
-      userId: userId,
-      userType: userData.userType,
-      name: userData.name,
-      email: userData.email,
-      totalBalance: totalBalance,
-      totalExpense: totalExpense, // Use the totalExpense passed as a parameter
-      date: new Date(), // Use the current date as the transaction date
-      // Add any other fields you want to include in the report here
-    };
+//     // Create the transaction report
+//     const reportData = {
+//       userId: userId,
+//       userType: userData.userType,
+//       name: userData.name,
+//       email: userData.email,
+//       totalBalance: totalBalance,
+//       totalExpense: totalExpense, // Use the totalExpense passed as a parameter
+//       date: new Date(), // Use the current date as the transaction date
+//       // Add any other fields you want to include in the report here
+//     };
 
-    return reportData;
-  } catch (error) {
-    // Handle any errors that occur during report creation
-    console.error(error);
-    throw error; // You can choose to throw the error or handle it in a different way
-  }
-};
+//     return reportData;
+//   } catch (error) {
+//     // Handle any errors that occur during report creation
+//     console.error(error);
+//     throw error; // You can choose to throw the error or handle it in a different way
+//   }
+// };
 
-export const getTransactionReports = tryCatchWrapper(async (req, res) => {
-  const user = req.info.userId;
+// export const getTransactionReports = tryCatchWrapper(async (req, res) => {
+//   const user = req.info.userId;
 
-  try {
-    // Retrieve the existing transaction reports for the user from the database
-    const transactionReports = await transctionReport.find({ userId: user });
+//   try {
+//     // Retrieve the existing transaction reports for the user from the database
+//     const transactionReports = await transctionReport.find({ userId: user });
 
-    // Your additional logic for formatting or processing the transaction reports
-    // before sending the response can go here
+//     // Your additional logic for formatting or processing the transaction reports
+//     // before sending the response can go here
 
-    // Return the transaction reports to the client
-    return res.status(200).json({ transactionReports });
-  } catch (error) {
-    // Handle any errors that occur during fetching the reports
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-});
+//     // Return the transaction reports to the client
+//     return res.status(200).json({ transactionReports });
+//   } catch (error) {
+//     // Handle any errors that occur during fetching the reports
+//     console.error(error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// });
 
 export const updateOrderFood = tryCatchWrapper(async (req, res) => {
   let body = { ...req.body };
